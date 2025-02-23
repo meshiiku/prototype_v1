@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,6 +20,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
+      locale: DevicePreview.locale(context), // 言語設定の変更を適用
+      builder: DevicePreview.appBuilder, // DevicePreview を適用
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
