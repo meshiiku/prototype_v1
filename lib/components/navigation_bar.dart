@@ -10,9 +10,10 @@ class CustomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return NavigationBar(
       destinations: const [
-        NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-        NavigationDestination(icon: Icon(Icons.search), label: "Search"),
-        NavigationDestination(icon: Icon(Icons.analytics), label: "Analytics"),
+        NavigationDestination(icon: Icon(Icons.person), label: "自分のお腹"),
+        NavigationDestination(icon: Icon(Icons.people_sharp), label: "みんなのお腹"),
+        NavigationDestination(icon: Icon(Icons.map), label: "地図"),
+        NavigationDestination(icon: Icon(Icons.flag), label: "みんなの助け"),
       ],
     );
   }
