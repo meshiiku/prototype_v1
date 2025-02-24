@@ -5,13 +5,9 @@ import "package:prototype_v1/screen/users-screen.dart";
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 
-
 void main() {
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const MyApp(),
-    ),
+    DevicePreview(enabled: !kReleaseMode, builder: (context) => const MyApp()),
   );
 }
 
@@ -24,9 +20,10 @@ class MyApp extends StatelessWidget {
       title: "メシイク？",
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.system,
       home: const MyHomePage(title: "メシイク？"),
-      locale: DevicePreview.locale(context), // 言語設定の変更を適用
+      locale: DevicePreview.locale(context),
+      // 言語設定の変更を適用
       builder: DevicePreview.appBuilder, // DevicePreview を適用
     );
   }
