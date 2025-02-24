@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:prototype_v1/components/navigation_bar.dart";
-import "package:prototype_v1/screen/profile.dart";
+import "package:prototype_v1/model/user_profile.dart";
+import "package:prototype_v1/screen/users-screen.dart";
 
 void main() {
   runApp(const MyApp());
@@ -38,7 +39,14 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: const ProfileScreen(),
+      body: ProfileScreen(
+        profiles: [
+          UserProfile("GOROU5959", ["ラーメン"]),
+          UserProfile("Hikakin TV", ["ラーメン", "お酒", "イタリアン"]),
+          UserProfile("Masuo TV", ["焼肉", "お酒", "イタリアン"]),
+          UserProfile("Gorou TV", ["ジャンクフード", "お酒", "大食い"]),
+        ],
+      ),
       bottomNavigationBar: const CustomNavigationBar(currentTab: 0),
     );
   }
