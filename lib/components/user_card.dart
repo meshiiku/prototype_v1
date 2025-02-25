@@ -11,29 +11,46 @@ class UserCard extends StatelessWidget {
     // TODO: implement build
     return Card(
       shape: RoundedRectangleBorder(),
+      shadowColor: Colors.transparent,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.all(1),
+            padding: EdgeInsets.all(1),
+            margin: EdgeInsets.all(2),
             child: Row(
               children: [
-                CircleAvatar(),
+                CircleAvatar(radius: 26),
                 SizedBox(width: 14),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(profile.username),
+                    Text(
+                      profile.username,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
                     Row(
                       children:
                           profile.hashtags
                               .map(
                                 (item) => Container(
-                                  padding: EdgeInsets.only(left: 6, right: 6),
-                                  margin: EdgeInsets.only(left: 2, right: 2),
+                                  padding: const EdgeInsets.only(
+                                    left: 6,
+                                    right: 6,
+                                    top: 5,
+                                    bottom: 5,
+                                  ),
+                                  margin: const EdgeInsets.only(
+                                    left: 2,
+                                    right: 2,
+                                    top: 4,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: Colors.red.shade400,
+                                    color: Theme.of(context).hoverColor,
                                     shape: BoxShape.rectangle,
                                     borderRadius: BorderRadius.circular(2.0),
                                   ),

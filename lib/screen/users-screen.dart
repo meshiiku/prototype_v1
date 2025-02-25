@@ -11,12 +11,17 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: profiles.length,
-      itemBuilder: (context, index) {
-        final profile = profiles[index];
-        return UserCard(profile: profile);
-      },
+    return RawScrollbar(
+      thumbColor: Theme.of(context).highlightColor,
+      radius: Radius.circular(2.0),
+      thickness: 3,
+      child: ListView(
+        children: [
+          const Text("友達", style: TextStyle(fontSize: 20)),
+          ...profiles.map((item) => UserCard(profile: item)).toList(),
+          const Text("知り合いかも"),
+        ],
+      ),
     );
   }
 }

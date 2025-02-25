@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
+import "package:prototype_v1/constants/user_profile_dummies.dart";
 import "package:prototype_v1/components/navigation_bar.dart";
 import "package:prototype_v1/constants/theme.dart";
-import "package:prototype_v1/model/user_profile.dart";
 import "package:prototype_v1/screen/mypage-screen.dart";
 import "package:prototype_v1/screen/search-screen.dart";
 import "package:prototype_v1/screen/store-history-screen.dart";
@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ProfileScreen(
       profiles: [
         // 仮データ
-        UserProfile("username", ["食べまくり"]),
+        ...dummyUsers,
       ],
     ),
     const StoreHistoryScreen(),
@@ -59,15 +59,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: const Text("メシイク？"),
-        titleTextStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).textTheme.bodyLarge?.color,
-        ),
+      body: NestedScrollView(
+        headerSliverBuilder:
+            (context, _) => [
+              SliverAppBar(
+                title: const Text(
+                  "メシイク？",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+              ),
+            ],
+        body: screens[_currentIndex],
       ),
-      body: screens[_currentIndex],
       bottomNavigationBar: CustomNavigationBar(
         currentTab: _currentIndex,
         onDestinationSelected: (index) {
