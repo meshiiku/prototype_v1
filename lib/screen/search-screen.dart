@@ -1,6 +1,11 @@
+import "dart:convert";
+
 import "package:app_settings/app_settings.dart";
 import "package:flutter/material.dart";
+import "package:flutter_map/flutter_map.dart";
+import "package:flutter_map_animations/flutter_map_animations.dart";
 import "package:geolocator/geolocator.dart";
+import "package:latlong2/latlong.dart";
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -9,9 +14,14 @@ class SearchScreen extends StatefulWidget {
   _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
-  Position? _currentPosition;
+class _SearchScreenState extends State<SearchScreen>
+    with TickerProviderStateMixin {
+  LatLng? _currentPosition;
+  final LatLng _defaultPosition = LatLng(43.062087, 141.354404);
   String _locationMessage = "位置情報：";
+
+  // マップのアニメーション設定
+  late final _animatedMapController = AnimatedMapController(vsync: this);
 
   Future<void> _updateLocationInfo() async {
     try {
@@ -34,12 +44,12 @@ class _SearchScreenState extends State<SearchScreen> {
       // 位置を取得
       Position position = await Geolocator.getCurrentPosition();
       setState(() {
-        _currentPosition = position;
-        _locationMessage = '現在位置: ${position.latitude}, ${position.longitude}';
+        _currentPosition = LatLng(position.latitude, position.longitude);
+        _locationMessage = "現在位置: ${position.latitude}, ${position.longitude}";
       });
     } catch (e) {
       setState(() {
-        _locationMessage = '位置情報の取得に失敗しました: $e';
+        _locationMessage = "位置情報の取得に失敗しました: $e";
       });
     }
   }
@@ -49,10 +59,51 @@ class _SearchScreenState extends State<SearchScreen> {
     Geolocator.requestPermission();
 
     return Scaffold(
-      body: Container(child: Text("${_locationMessage}")),
+      body: Stack(
+        children: [
+          FlutterMap(
+            options: MapOptions(
+              initialCenter: _defaultPosition,
+              initialZoom: 10.0,
+            ),
+            mapController: _animatedMapController.mapController,
+            children: [
+              TileLayer(
+                urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+              ),
+              MarkerLayer(
+                rotate: true,
+                markers: [
+                  Marker(
+                    width: 40,
+                    height: 40,
+                    point: _currentPosition ?? _defaultPosition,
+                    child: CircleAvatar(radius: 22),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          // コピーライト表示
+          const Padding(
+            padding: EdgeInsets.all(7),
+            child: Text(
+              "©︎ OpenStreetMap contributors",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _updateLocationInfo();
+        onPressed: () async {
+          await _updateLocationInfo();
+          // 更新できたら現在地にフォーカス
+          if (_currentPosition != null) {
+            _animatedMapController.centerOnPoint(_currentPosition!);
+          }
         },
         child: Icon(Icons.gps_fixed),
       ),
