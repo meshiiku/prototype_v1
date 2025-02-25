@@ -7,10 +7,12 @@ environment:
   sdk: ^3.7.0
 
 dependencies:
+  app_settings: ^5.2.0
   cupertino_icons: ^1.0.8
   device_preview: ^1.2.0
   flutter:
     sdk: flutter
+  geolocator: ^13.0.2
 
 
 dev_dependencies:
