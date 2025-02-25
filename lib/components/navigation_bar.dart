@@ -1,14 +1,13 @@
 import "package:flutter/material.dart";
 
 class CustomNavigationBar extends StatelessWidget {
-  final int currentTab;
-  final Function ontap;
+  final int currentTab; // 現在のタブ
+  final Function onDestinationSelected; // ナビゲーションのアイテムがクリックされた時のイベント
 
-  // todo: タップした時のイベント
   const CustomNavigationBar({
     super.key,
     required this.currentTab,
-    required this.ontap,
+    required this.onDestinationSelected,
   });
 
   @override
@@ -21,9 +20,8 @@ class CustomNavigationBar extends StatelessWidget {
         NavigationDestination(icon: Icon(Icons.person), label: "マイページ"),
       ],
       selectedIndex: currentTab,
-
       onDestinationSelected: (int index) {
-        ontap(index);
+        onDestinationSelected(index);
       },
     );
   }

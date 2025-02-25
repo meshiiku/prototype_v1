@@ -1,6 +1,6 @@
 class UserProfile {
-  String username;
-  List<String> hashtags;
+  String username; // ユーザー名
+  List<String> hashtags; //ハッシュタグ
 
   UserProfile(this.username, this.hashtags);
 }

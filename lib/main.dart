@@ -40,16 +40,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _currentIndex = 2;
+  int _currentIndex = 0;
+
+  // ナビバーの実装する画面一覧
   List<Widget> screens = [
-    SearchScreen(),
+    const SearchScreen(),
     ProfileScreen(
       profiles: [
-        new UserProfile("username", ["hashtags"]),
+        // 仮データ
+        UserProfile("username", ["hashtags"]),
       ],
     ),
-    StoreHistoryScreen(),
-    MyPageScreen(),
+    const StoreHistoryScreen(),
+    const MyPageScreen(),
   ];
 
   @override
@@ -57,14 +60,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("メシイク？"),
+        title: const Text("メシイク？"),
       ),
       body: screens[_currentIndex],
       bottomNavigationBar: CustomNavigationBar(
-        currentTab: this._currentIndex,
-        ontap: (index) {
+        currentTab: _currentIndex,
+        onDestinationSelected: (index) {
           setState(() {
-            this._currentIndex = index;
+            _currentIndex = index;
           });
         },
       ),
