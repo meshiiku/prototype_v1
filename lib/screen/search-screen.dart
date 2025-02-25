@@ -1,5 +1,3 @@
-import "dart:convert";
-
 import "package:app_settings/app_settings.dart";
 import "package:flutter/material.dart";
 import "package:flutter_map/flutter_map.dart";
@@ -17,12 +15,15 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen>
     with TickerProviderStateMixin {
   LatLng? _currentPosition;
-  final LatLng _defaultPosition = LatLng(43.062087, 141.354404);
-  String _locationMessage = "位置情報：";
+  final LatLng _defaultPosition = const LatLng(
+    43.062087,
+    141.354404,
+  ); //札幌市をデフォルト座標として使用
 
   // マップのアニメーション設定
   late final _animatedMapController = AnimatedMapController(vsync: this);
 
+  // 現在地を更新する関数
   Future<void> _updateLocationInfo() async {
     try {
       LocationPermission permission = await Geolocator.checkPermission();
@@ -45,25 +46,20 @@ class _SearchScreenState extends State<SearchScreen>
       Position position = await Geolocator.getCurrentPosition();
       setState(() {
         _currentPosition = LatLng(position.latitude, position.longitude);
-        _locationMessage = "現在位置: ${position.latitude}, ${position.longitude}";
       });
     } catch (e) {
-      setState(() {
-        _locationMessage = "位置情報の取得に失敗しました: $e";
-      });
+      debugPrint(e.toString());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Geolocator.requestPermission();
-
     return Scaffold(
       body: Stack(
         children: [
           FlutterMap(
             options: MapOptions(
-              initialCenter: _defaultPosition,
+              initialCenter: _defaultPosition, //初期位置
               initialZoom: 10.0,
             ),
             mapController: _animatedMapController.mapController,
@@ -74,17 +70,19 @@ class _SearchScreenState extends State<SearchScreen>
               MarkerLayer(
                 rotate: true,
                 markers: [
+                  // 現在地表示用のマーカー
                   Marker(
                     width: 40,
                     height: 40,
                     point: _currentPosition ?? _defaultPosition,
-                    child: CircleAvatar(radius: 22),
+                    child: const CircleAvatar(radius: 22),
                   ),
                 ],
               ),
             ],
           ),
-          // コピーライト表示
+          // コピーライト表示（必要）
+          // 参考： https://www.openstreetmap.org/copyright/ja
           const Padding(
             padding: EdgeInsets.all(7),
             child: Text(
@@ -105,7 +103,7 @@ class _SearchScreenState extends State<SearchScreen>
             _animatedMapController.centerOnPoint(_currentPosition!);
           }
         },
-        child: Icon(Icons.gps_fixed),
+        child: const Icon(Icons.gps_fixed),
       ),
     );
   }
