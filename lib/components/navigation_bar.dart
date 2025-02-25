@@ -23,6 +23,7 @@ class CustomNavigationBar extends StatelessWidget {
       onDestinationSelected: (int index) {
         onDestinationSelected(index);
       },
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
     );
   }
 }

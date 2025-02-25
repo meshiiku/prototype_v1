@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:prototype_v1/components/navigation_bar.dart";
+import "package:prototype_v1/constants/theme.dart";
 import "package:prototype_v1/model/user_profile.dart";
 import "package:prototype_v1/screen/mypage-screen.dart";
 import "package:prototype_v1/screen/search-screen.dart";
@@ -21,8 +22,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "メシイク？",
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       themeMode: ThemeMode.system,
       home: const MyHomePage(),
       locale: DevicePreview.locale(context),
@@ -48,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ProfileScreen(
       profiles: [
         // 仮データ
-        UserProfile("username", ["hashtags"]),
+        UserProfile("username", ["食べまくり"]),
       ],
     ),
     const StoreHistoryScreen(),
@@ -59,8 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: const Text("メシイク？"),
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).textTheme.bodyLarge?.color,
+        ),
       ),
       body: screens[_currentIndex],
       bottomNavigationBar: CustomNavigationBar(
