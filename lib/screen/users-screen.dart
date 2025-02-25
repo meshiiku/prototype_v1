@@ -17,7 +17,10 @@ class ProfileScreen extends StatelessWidget {
       thickness: 3,
       child: ListView(
         children: [
-          const Text("友達", style: TextStyle(fontSize: 20)),
+          const Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Text("友達", style: TextStyle(fontSize: 20)),
+          ),
           ...profiles.map((item) => UserCard(profile: item)).toList(),
           const Text("知り合いかも"),
         ],
