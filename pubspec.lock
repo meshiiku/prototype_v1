@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.3.0"
+  animated_stack_widget:
+    dependency: transitive
+    description:
+      name: animated_stack_widget
+      sha256: ce4788dd158768c9d4388354b6fb72600b78e041a37afc4c279c63ecafcb9408
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   app_settings:
     dependency: "direct main"
     description:
@@ -303,18 +311,34 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_map
-      sha256: "82786b8e1ffbff079487eeeed59a34e8a0b09896dd7713d8e1dc193d673496b5"
+      sha256: "2ecb34619a4be19df6f40c2f8dce1591675b4eff7a6857bd8f533706977385da"
       url: "https://pub.dev"
     source: hosted
-    version: "8.0.0"
+    version: "7.0.2"
   flutter_map_animations:
     dependency: "direct main"
     description:
       name: flutter_map_animations
-      sha256: bf583863561861aaaf4854ae7ed8940d79bea7d32918bf7a85d309b25235a09e
+      sha256: "08233f89919049a3601e785d32e9d1d9e1faac6578190150f1d7495fc1050d36"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.0"
+    version: "0.8.0"
+  flutter_map_marker_cluster:
+    dependency: "direct main"
+    description:
+      name: flutter_map_marker_cluster
+      sha256: "2c1fb4d7a2105c4bbeb89be215320507f4b71b2036df4341fab9d2aa677d3ae9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
+  flutter_map_marker_popup:
+    dependency: transitive
+    description:
+      name: flutter_map_marker_popup
+      sha256: a7540538114b5d1627ab67b498273d66bc36090385412ae49ef215af4a2861c5
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -948,4 +972,4 @@ packages:
     version: "3.1.3"
 sdks:
   dart: ">=3.7.0 <4.0.0"
-  flutter: ">=3.27.0"
+  flutter: ">=3.24.0"

@@ -2,8 +2,11 @@ import "package:app_settings/app_settings.dart";
 import "package:flutter/material.dart";
 import "package:flutter_map/flutter_map.dart";
 import "package:flutter_map_animations/flutter_map_animations.dart";
+import "package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart";
 import "package:geolocator/geolocator.dart";
 import "package:latlong2/latlong.dart";
+import "package:prototype_v1/model/shop.dart";
+import "package:prototype_v1/service/hotpepper-api-client.dart";
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -19,6 +22,7 @@ class _SearchScreenState extends State<SearchScreen>
     43.062087,
     141.354404,
   ); //札幌市をデフォルト座標として使用
+  List<Shop> shops = [];
 
   // マップのアニメーション設定
   late final _animatedMapController = AnimatedMapController(vsync: this);
@@ -67,17 +71,53 @@ class _SearchScreenState extends State<SearchScreen>
               TileLayer(
                 urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
               ),
-              MarkerLayer(
-                rotate: true,
-                markers: [
-                  // 現在地表示用のマーカー
-                  Marker(
-                    width: 40,
-                    height: 40,
-                    point: _currentPosition ?? _defaultPosition,
-                    child: const CircleAvatar(radius: 22),
-                  ),
-                ],
+              MarkerClusterLayerWidget(
+                options: MarkerClusterLayerOptions(
+                  builder: (context, marker) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(color: Colors.orange, blurRadius: 20),
+                        ],
+                      ),
+                      child: Center(child: Text(marker.length.toString())),
+                    );
+                  },
+                  markers: [
+                    // 現在地表示用のマーカー
+                    Marker(
+                      width: 40,
+                      height: 40,
+                      point: _currentPosition ?? _defaultPosition,
+                      child: const CircleAvatar(
+                        radius: 22,
+                        backgroundColor: Colors.red,
+                      ),
+                    ),
+                    ...shops.map((shop) {
+                      debugPrint(shop.name);
+                      return Marker(
+                        width: 50,
+                        height: 50,
+                        point: LatLng(shop.lat, shop.lng),
+                        child: CircleAvatar(
+                          radius: 25,
+                          child: CircleAvatar(
+                            radius: 24,
+                            backgroundColor: Colors.red,
+
+                            backgroundImage:
+                                shop.logo_image != null
+                                    ? NetworkImage(shop.logo_image!)
+                                    : null,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ],
+                ),
               ),
             ],
           ),
@@ -101,6 +141,15 @@ class _SearchScreenState extends State<SearchScreen>
           // 更新できたら現在地にフォーカス
           if (_currentPosition != null) {
             _animatedMapController.centerOnPoint(_currentPosition!);
+
+            final fetched_shops = await fetchShops(
+              _currentPosition!.latitude,
+              _currentPosition!.longitude,
+            );
+
+            setState(() {
+              shops = fetched_shops;
+            });
           }
         },
         child: const Icon(Icons.gps_fixed),
