@@ -5,7 +5,7 @@ import "package:flutter_map_animations/flutter_map_animations.dart";
 import "package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart";
 import "package:geolocator/geolocator.dart";
 import "package:latlong2/latlong.dart";
-import "package:prototype_v1/model/shop.dart";
+import "package:prototype_v1/model/restaurant.dart";
 import "package:prototype_v1/service/hotpepper-api-client.dart";
 
 class SearchScreen extends StatefulWidget {
@@ -22,7 +22,7 @@ class _SearchScreenState extends State<SearchScreen>
     43.062087,
     141.354404,
   ); //札幌市をデフォルト座標として使用
-  List<Shop> shops = [];
+  List<Restaurant> restaurants = [];
 
   // マップのアニメーション設定
   late final _animatedMapController = AnimatedMapController(vsync: this);
@@ -56,9 +56,9 @@ class _SearchScreenState extends State<SearchScreen>
     }
   }
 
-  List<Marker> buildMarkers() {
+  List<Marker> buildRestaurantMarkers() {
     return [
-      ...shops.map(
+      ...restaurants.map(
         (shop) => Marker(
           width: 40,
           height: 40,
@@ -67,7 +67,6 @@ class _SearchScreenState extends State<SearchScreen>
             radius: 20,
             child: CircleAvatar(
               radius: 19,
-
               backgroundImage:
                   shop.logo_image != null
                       ? NetworkImage(shop.logo_image!)
@@ -77,6 +76,30 @@ class _SearchScreenState extends State<SearchScreen>
         ),
       ),
     ];
+  }
+
+  Marker buildLocationMarker() {
+    return Marker(
+      width: 20,
+      height: 20,
+      point: _currentPosition ?? _defaultPosition,
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          boxShadow: [BoxShadow(color: Colors.blue, blurRadius: 6)],
+        ),
+        child: Container(
+          margin: EdgeInsets.all(2),
+          width: 5,
+          height: 5,
+          decoration: const BoxDecoration(
+            color: Colors.blue,
+            shape: BoxShape.circle,
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -109,36 +132,10 @@ class _SearchScreenState extends State<SearchScreen>
                       child: Center(child: Text(marker.length.toString())),
                     );
                   },
-                  markers: buildMarkers(),
+                  markers: buildRestaurantMarkers(),
                 ),
               ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    width: 20,
-                    height: 20,
-                    point: _currentPosition ?? _defaultPosition,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(color: Colors.blue, blurRadius: 6),
-                        ],
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.all(2),
-                        width: 5,
-                        height: 5,
-                        decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              MarkerLayer(markers: [buildLocationMarker()]),
             ],
           ),
           // コピーライト表示（必要）
@@ -167,7 +164,7 @@ class _SearchScreenState extends State<SearchScreen>
               _currentPosition!.longitude,
             );
 
-            setState(() => shops = fetched_shops);
+            setState(() => restaurants = fetched_shops);
           }
         },
         child: const Icon(Icons.gps_fixed),

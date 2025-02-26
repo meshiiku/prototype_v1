@@ -3,9 +3,9 @@ import 'package:http/http.dart' as http;
 import "package:prototype_v1/env.dart";
 import 'dart:convert';
 
-import "package:prototype_v1/model/shop.dart";
+import "package:prototype_v1/model/restaurant.dart";
 
-Future<List<Shop>> fetchShops(double latitude, double longitude) async {
+Future<List<Restaurant>> fetchShops(double latitude, double longitude) async {
   var apiKey = Env.apiKey;
   final url =
       'https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=$apiKey&lat=$latitude&lng=$longitude&range=5&format=json&count=30';
@@ -16,7 +16,7 @@ Future<List<Shop>> fetchShops(double latitude, double longitude) async {
     final Map<String, dynamic> data = json.decode(response.body);
     debugPrint(data.toString());
     final List<dynamic> shops = data['results']['shop'];
-    return shops.map((shop) => Shop.fromJson(shop)).toList();
+    return shops.map((shop) => Restaurant.fromJson(shop)).toList();
   } else {
     throw Exception('店舗データの取得に失敗しました');
   }
