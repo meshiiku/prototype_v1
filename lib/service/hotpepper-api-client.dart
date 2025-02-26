@@ -8,7 +8,7 @@ import "package:prototype_v1/model/shop.dart";
 Future<List<Shop>> fetchShops(double latitude, double longitude) async {
   var apiKey = Env.apiKey;
   final url =
-      'https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=$apiKey&lat=$latitude&lng=$longitude&range=500&format=json';
+      'https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=$apiKey&lat=$latitude&lng=$longitude&range=5&format=json&count=30';
 
   final response = await http.get(Uri.parse(url));
 

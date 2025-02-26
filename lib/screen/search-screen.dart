@@ -56,6 +56,29 @@ class _SearchScreenState extends State<SearchScreen>
     }
   }
 
+  List<Marker> buildMarkers() {
+    return [
+      ...shops.map(
+        (shop) => Marker(
+          width: 40,
+          height: 40,
+          point: LatLng(shop.lat, shop.lng),
+          child: CircleAvatar(
+            radius: 20,
+            child: CircleAvatar(
+              radius: 19,
+
+              backgroundImage:
+                  shop.logo_image != null
+                      ? NetworkImage(shop.logo_image!)
+                      : null,
+            ),
+          ),
+        ),
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,11 +94,12 @@ class _SearchScreenState extends State<SearchScreen>
               TileLayer(
                 urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
               ),
+
               MarkerClusterLayerWidget(
                 options: MarkerClusterLayerOptions(
                   builder: (context, marker) {
                     return Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.orange,
                         shape: BoxShape.circle,
                         boxShadow: [
@@ -85,39 +109,35 @@ class _SearchScreenState extends State<SearchScreen>
                       child: Center(child: Text(marker.length.toString())),
                     );
                   },
-                  markers: [
-                    // 現在地表示用のマーカー
-                    Marker(
-                      width: 40,
-                      height: 40,
-                      point: _currentPosition ?? _defaultPosition,
-                      child: const CircleAvatar(
-                        radius: 22,
-                        backgroundColor: Colors.red,
+                  markers: buildMarkers(),
+                ),
+              ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    width: 20,
+                    height: 20,
+                    point: _currentPosition ?? _defaultPosition,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(color: Colors.blue, blurRadius: 6),
+                        ],
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.all(2),
+                        width: 5,
+                        height: 5,
+                        decoration: const BoxDecoration(
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
+                        ),
                       ),
                     ),
-                    ...shops.map((shop) {
-                      debugPrint(shop.name);
-                      return Marker(
-                        width: 50,
-                        height: 50,
-                        point: LatLng(shop.lat, shop.lng),
-                        child: CircleAvatar(
-                          radius: 25,
-                          child: CircleAvatar(
-                            radius: 24,
-                            backgroundColor: Colors.red,
-
-                            backgroundImage:
-                                shop.logo_image != null
-                                    ? NetworkImage(shop.logo_image!)
-                                    : null,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -147,9 +167,7 @@ class _SearchScreenState extends State<SearchScreen>
               _currentPosition!.longitude,
             );
 
-            setState(() {
-              shops = fetched_shops;
-            });
+            setState(() => shops = fetched_shops);
           }
         },
         child: const Icon(Icons.gps_fixed),
