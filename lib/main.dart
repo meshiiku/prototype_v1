@@ -60,17 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: NestedScrollView(
-        headerSliverBuilder:
-            (context, _) => [
-              SliverAppBar(
-                title: const Text(
-                  "メシイク？",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
-              ),
-            ],
+        headerSliverBuilder: (context, _) => [],
         body: screens[_currentIndex],
       ),
       bottomNavigationBar: CustomNavigationBar(
