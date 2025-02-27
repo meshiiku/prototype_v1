@@ -5,6 +5,7 @@ import "package:flutter_map_animations/flutter_map_animations.dart";
 import "package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart";
 import "package:geolocator/geolocator.dart";
 import "package:latlong2/latlong.dart";
+import "package:modal_bottom_sheet/modal_bottom_sheet.dart";
 import "package:prototype_v1/model/restaurant.dart";
 import "package:prototype_v1/service/hotpepper-api-client.dart";
 
@@ -152,22 +153,65 @@ class _SearchScreenState extends State<SearchScreen>
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await _updateLocationInfo();
-          // 更新できたら現在地にフォーカス
-          if (_currentPosition != null) {
-            _animatedMapController.centerOnPoint(_currentPosition!);
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            onPressed: () async {
+              await _updateLocationInfo();
+              // 更新できたら現在地にフォーカス
+              if (_currentPosition != null) {
+                _animatedMapController.centerOnPoint(_currentPosition!);
 
-            final fetched_shops = await fetchShops(
-              _currentPosition!.latitude,
-              _currentPosition!.longitude,
-            );
+                final fetched_shops = await fetchShops(
+                  _currentPosition!.latitude,
+                  _currentPosition!.longitude,
+                );
 
-            setState(() => restaurants = fetched_shops);
-          }
-        },
-        child: const Icon(Icons.gps_fixed),
+                setState(() => restaurants = fetched_shops);
+              }
+            },
+            child: const Icon(Icons.gps_fixed),
+          ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            heroTag: "search",
+
+            onPressed: () async {
+              showMaterialModalBottomSheet(
+                context: context,
+                expand: false,
+                bounce: true,
+
+                builder:
+                    (context) => SafeArea(
+                      top: false,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            title: const Text('設定とプライバシー'),
+                            leading: const Icon(Icons.settings),
+                            onTap: () => Navigator.of(context).pop(),
+                          ),
+                          ListTile(
+                            title: const Text('アクティビティ'),
+                            leading: const Icon(Icons.history),
+                            onTap: () => Navigator.of(context).pop(),
+                          ),
+                          ListTile(
+                            title: const Text('アーカイブ'),
+                            leading: const Icon(Icons.archive),
+                            onTap: () => Navigator.of(context).pop(),
+                          ),
+                        ],
+                      ),
+                    ),
+              );
+            },
+            child: const Icon(Icons.search),
+          ),
+        ],
       ),
     );
   }
