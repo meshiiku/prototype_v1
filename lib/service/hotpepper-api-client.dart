@@ -5,7 +5,10 @@ import 'dart:convert';
 
 import "package:prototype_v1/model/restaurant.dart";
 
-Future<List<Restaurant>> fetchShops(double latitude, double longitude) async {
+Future<List<Restaurant>> fetchRestaurants(
+  double latitude,
+  double longitude,
+) async {
   var apiKey = Env.apiKey;
   final url =
       'https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=$apiKey&lat=$latitude&lng=$longitude&range=5&format=json&count=30';

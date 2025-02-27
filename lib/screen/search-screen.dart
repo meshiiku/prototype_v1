@@ -394,23 +394,23 @@ class _SearchScreenState extends State<SearchScreen>
     } else {
       _updateLocationInfoThenFocusNoDelay();
     }
-    updateNearShops();
+    updateNearRestaurants();
     // TODO: implement initState
     super.initState();
   }
 
-  void updateNearShops() async {
+  void updateNearRestaurants() async {
     await _updateLocationInfo();
     // 更新できたら現在地にフォーカス
     if (currentPosition != null) {
       _animatedMapController.centerOnPoint(currentPosition!);
 
-      final fetchedShops = await fetchShops(
+      final fetchedRestaurants = await fetchRestaurants(
         currentPosition!.latitude,
         currentPosition!.longitude,
       );
       tags = [];
-      for (var restaurant in fetchedShops) {
+      for (var restaurant in fetchedRestaurants) {
         // 見つけたお店のジャンルをtagsに追加する。
         if (restaurant.genre != null) {
           if (!tags.contains(restaurant.genre)) {
@@ -422,7 +422,7 @@ class _SearchScreenState extends State<SearchScreen>
 
         continue;
       }
-      setState(() => restaurants = fetchedShops);
+      setState(() => restaurants = fetchedRestaurants);
     }
   }
 
@@ -480,7 +480,7 @@ class _SearchScreenState extends State<SearchScreen>
         children: [
           FloatingActionButton(
             onPressed: () {
-              updateNearShops();
+              updateNearRestaurants();
             },
             child: const Icon(Icons.gps_fixed),
           ),
