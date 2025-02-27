@@ -330,7 +330,7 @@ class _SearchScreenState extends State<SearchScreen>
         Positioned(
           left: 1,
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Material(
               elevation: 5,
               shape: RoundedRectangleBorder(
@@ -344,7 +344,7 @@ class _SearchScreenState extends State<SearchScreen>
                   width: 50, // ボタンの幅
                   height: 50, // ボタンの高さ
                   alignment: Alignment.center,
-                  child: Icon(
+                  child: const Icon(
                     Icons.smart_toy_rounded,
                     size: 30,
                     color: Colors.white,

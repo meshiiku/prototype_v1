@@ -39,10 +39,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
     return ListView(
       children: [
         UserCard(
-          profile: User(
-            userId: "${username}",
-            hashtags: ["焼肉", "ガツガツ系", "うどん"],
-          ),
+          profile: User(userId: username, hashtags: ["焼肉", "ガツガツ系", "うどん"]),
         ),
         Stack(
           children: [
@@ -52,7 +49,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                   debugPrint(info);
                 });
               },
-              child: Icon(Icons.info),
+              child: const Icon(Icons.info),
             ),
           ],
         ),
