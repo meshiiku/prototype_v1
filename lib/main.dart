@@ -46,12 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // ナビバーの実装する画面一覧
   List<Widget> screens = [
     const SearchScreen(),
-    ProfileScreen(
-      profiles: [
-        // 仮データ
-        ...dummyUsers,
-      ],
-    ),
+    ProfileScreen(),
     const StoreHistoryScreen(),
     const MyPageScreen(),
   ];

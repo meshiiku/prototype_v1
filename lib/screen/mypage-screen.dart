@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:prototype_v1/components/user_card.dart";
 import "package:prototype_v1/constants/backend-client.dart";
 import "package:prototype_v1/model/user_profile.dart";
+import "package:prototype_v1/saves/jwt.dart";
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -16,13 +17,16 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
   @override
   void initState() {
-    backendAPIClient.loginAsDummy().then((value) {
-      if (value != null) {
+    resetJWTToken();
+    getJWTToken().then((jwtToken) async {
+      jwtToken ??= await backendAPIClient.loginAsAnonymous();
+      if (jwtToken != null) {
         setState(() {
-          username = JWT.decode(value).payload["display_name"].toString();
+          username = JWT.decode(jwtToken!).payload["user_id"].toString();
         });
       }
     });
+
     // TODO: implement initState
     super.initState();
   }
@@ -33,9 +37,21 @@ class _MyPageScreenState extends State<MyPageScreen> {
       children: [
         UserCard(
           profile: UserProfile(
-            username: "${username}",
+            user_id: "${username}",
             hashtags: ["焼肉", "ガツガツ系", "うどん"],
           ),
+        ),
+        Stack(
+          children: [
+            FloatingActionButton(
+              onPressed: () {
+                backendAPIClient.getCheck().then((info) {
+                  debugPrint(info);
+                });
+              },
+              child: Icon(Icons.info),
+            ),
+          ],
         ),
       ],
     );
