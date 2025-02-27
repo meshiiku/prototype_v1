@@ -1,5 +1,5 @@
-import "package:prototype_v1/model/user_profile.dart";
+import "package:prototype_v1/model/user.dart";
 
 final dummyUsers = [
-  UserProfile(user_id: "太郎", hashtags: ["焼肉", "ガツガツ系", "うどん"]),
+  User(userId: "太郎", hashtags: ["焼肉", "ガツガツ系", "うどん"]),
 ];

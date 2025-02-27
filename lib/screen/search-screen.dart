@@ -9,7 +9,7 @@ import "package:modal_bottom_sheet/modal_bottom_sheet.dart";
 import "package:prototype_v1/components/osm_copyright.dart";
 import "package:prototype_v1/components/user_card.dart";
 import "package:prototype_v1/model/restaurant.dart";
-import "package:prototype_v1/model/user_profile.dart";
+import "package:prototype_v1/model/user.dart";
 import "package:prototype_v1/service/hotpepper-api-client.dart";
 import "package:prototype_v1/state.dart";
 
@@ -93,11 +93,11 @@ class _SearchScreenState extends State<SearchScreen>
       Padding(
         padding: const EdgeInsets.all(6),
         child: UserCard(
-          profile: UserProfile(
-            user_id: restaurant.name,
+          profile: User(
+            userId: restaurant.name,
 
             hashtags: ["焼肉", "ガツガツ系", "うどん"],
-            profileImage: restaurant.logo_image,
+            profileImage: restaurant.logoImage,
           ),
         ),
       ),
@@ -247,8 +247,8 @@ class _SearchScreenState extends State<SearchScreen>
               child: CircleAvatar(
                 radius: 19,
                 backgroundImage:
-                    restaurant.logo_image != null
-                        ? NetworkImage(restaurant.logo_image!)
+                    restaurant.logoImage != null
+                        ? NetworkImage(restaurant.logoImage!)
                         : null,
               ),
             ),

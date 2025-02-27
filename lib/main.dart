@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:prototype_v1/constants/user_profile_dummies.dart";
 import "package:prototype_v1/components/navigation_bar.dart";
 import "package:prototype_v1/constants/theme.dart";
 import "package:prototype_v1/screen/mypage-screen.dart";
@@ -46,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // ナビバーの実装する画面一覧
   List<Widget> screens = [
     const SearchScreen(),
-    ProfileScreen(),
+    UsersScreen(),
     const StoreHistoryScreen(),
     const MyPageScreen(),
   ];

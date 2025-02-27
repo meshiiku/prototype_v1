@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
-import "package:prototype_v1/model/user_profile.dart";
+import "package:prototype_v1/model/user.dart";
 
 class UserCard extends StatelessWidget {
-  final UserProfile profile;
+  final User profile;
 
   const UserCard({super.key, required this.profile});
 
@@ -33,7 +33,7 @@ class UserCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      profile.user_id,
+                      profile.userId,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,

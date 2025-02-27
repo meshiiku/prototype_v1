@@ -2,7 +2,7 @@ import "package:dart_jsonwebtoken/dart_jsonwebtoken.dart";
 import "package:flutter/material.dart";
 import "package:prototype_v1/components/user_card.dart";
 import "package:prototype_v1/constants/backend-client.dart";
-import "package:prototype_v1/model/user_profile.dart";
+import "package:prototype_v1/model/user.dart";
 import "package:prototype_v1/saves/jwt.dart";
 
 class MyPageScreen extends StatefulWidget {
@@ -17,13 +17,17 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
   @override
   void initState() {
-    resetJWTToken();
+    //端末に保存しているjwtを取得
     getJWTToken().then((jwtToken) async {
+      // なければサーバーから取得
       jwtToken ??= await backendAPIClient.loginAsAnonymous();
+      //取得できたら、jwtをデコードしてユーザーIDを取得
       if (jwtToken != null) {
         setState(() {
           username = JWT.decode(jwtToken!).payload["user_id"].toString();
         });
+      } else {
+        // サーバーエラーなどでjwtが取得できなかった場合はココ
       }
     });
 
@@ -36,8 +40,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
     return ListView(
       children: [
         UserCard(
-          profile: UserProfile(
-            user_id: "${username}",
+          profile: User(
+            userId: "${username}",
             hashtags: ["焼肉", "ガツガツ系", "うどん"],
           ),
         ),

@@ -1,27 +1,20 @@
 import "package:flutter/material.dart";
 import "package:prototype_v1/components/user_card.dart";
 import "package:prototype_v1/constants/backend-client.dart";
-import "package:prototype_v1/model/user_profile.dart";
+import "package:prototype_v1/model/user.dart";
 
 // todo: アカウントリストを受け取ってそれを表示
 
-class ProfileScreen extends StatefulWidget {
-  ProfileScreen({super.key});
+class UsersScreen extends StatefulWidget {
+  const UsersScreen({super.key});
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _UsersScreenState createState() => _UsersScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _UsersScreenState extends State<UsersScreen> {
   final TextEditingController _userSearchController = TextEditingController();
-  List<UserProfile> profiles = [];
-
-  Future<void> _searchUser() async {
-    var result = await backendAPIClient.searchUser(_userSearchController.text);
-    setState(() {
-      profiles = result!;
-    });
-  }
+  List<User> profiles = [];
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +36,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderSide: BorderSide.none,
               ),
             ),
-            onChanged: (value) => {_searchUser()},
+            onChanged: (value) async {
+              var result = await backendAPIClient.searchUser(
+                _userSearchController.text,
+              );
+              if (result != null) {
+                setState(() {
+                  profiles = result;
+                });
+              }
+            },
           ),
 
-          const Padding(
-            padding: EdgeInsets.only(left: 12),
-            child: Text("友達", style: TextStyle(fontSize: 20)),
-          ),
-          ...this.profiles.map((item) => UserCard(profile: item)),
-          const Text("知り合いかも"),
+          ...profiles.map((item) => UserCard(profile: item)),
         ],
       ),
     );

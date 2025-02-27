@@ -1,6 +1,6 @@
 import "package:dio/dio.dart";
 import "package:flutter/cupertino.dart";
-import "package:prototype_v1/model/user_profile.dart";
+import "package:prototype_v1/model/user.dart";
 import "package:prototype_v1/saves/jwt.dart";
 
 class BackendAPIClient {
@@ -70,10 +70,10 @@ class BackendAPIClient {
   }
 
   // ユーザーを検索する
-  Future<List<UserProfile>?> searchUser(String query) async {
+  Future<List<User>?> searchUser(String query) async {
     final response = await getData("/account/users/search?q=$query");
     final List<dynamic> json = response.data;
-    final users = json.map((item) => UserProfile.fromJson(item));
+    final users = json.map((item) => User.fromJson(item));
     return users.toList();
   }
 }
