@@ -5,7 +5,6 @@ import "package:flutter_map_animations/flutter_map_animations.dart";
 import "package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart";
 import "package:geolocator/geolocator.dart";
 import "package:latlong2/latlong.dart";
-import "package:modal_bottom_sheet/modal_bottom_sheet.dart";
 import "package:prototype_v1/components/osm_copyright.dart";
 import "package:prototype_v1/model/restaurant.dart";
 import "package:prototype_v1/service/hotpepper-api-client.dart";
@@ -65,7 +64,7 @@ class _SearchScreenState extends State<SearchScreen>
       await _animatedMapController.centerOnPoint(
         currentPosition!,
         zoom: 16,
-        duration: Duration(seconds: 1),
+        duration: const Duration(seconds: 1),
       );
     }
   }
@@ -77,7 +76,7 @@ class _SearchScreenState extends State<SearchScreen>
       await _animatedMapController.centerOnPoint(
         currentPosition!,
         zoom: 16,
-        duration: Duration(seconds: 0),
+        duration: const Duration(seconds: 0),
       );
     }
   }
@@ -108,8 +107,9 @@ class _SearchScreenState extends State<SearchScreen>
   // 現在地マーカーのビルド
   Marker buildCurrentLocationMarker() {
     // 現在地がわからなければ表示しない
-    if (currentPosition == null)
+    if (currentPosition == null) {
       return Marker(point: _defaultPosition, child: Container());
+    }
     return Marker(
       width: 20,
       height: 20,
@@ -172,11 +172,11 @@ class _SearchScreenState extends State<SearchScreen>
               padding: const EdgeInsets.only(left: 9.0),
               child: Container(
                 width: 100,
-                child: Center(child: Text("#data")),
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(6.0),
                 ),
+                child: const Center(child: Text("#data")),
               ),
             ),
         scrollDirection: Axis.horizontal,
@@ -190,8 +190,9 @@ class _SearchScreenState extends State<SearchScreen>
   void initState() {
     if (currentPosition == null) {
       _updateLocationInfoThenFocus();
-    } else
+    } else {
       _updateLocationInfoThenFocusNoDelay();
+    }
 
     // TODO: implement initState
     super.initState();
@@ -252,12 +253,12 @@ class _SearchScreenState extends State<SearchScreen>
               if (currentPosition != null) {
                 _animatedMapController.centerOnPoint(currentPosition!);
 
-                final fetched_shops = await fetchShops(
+                final fetchedShops = await fetchShops(
                   currentPosition!.latitude,
                   currentPosition!.longitude,
                 );
 
-                setState(() => restaurants = fetched_shops);
+                setState(() => restaurants = fetchedShops);
               }
             },
             child: const Icon(Icons.gps_fixed),
