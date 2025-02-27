@@ -31,7 +31,10 @@ class _SearchScreenState extends State<SearchScreen>
   List<String> tags = [];
 
   // マップのアニメーション設定
-  late final _animatedMapController = AnimatedMapController(vsync: this);
+  late final _animatedMapController = AnimatedMapController(
+    vsync: this,
+    mapController: MapController(),
+  );
 
   // 現在地を更新する関数
   Future<void> _updateLocationInfo() async {
@@ -143,7 +146,7 @@ class _SearchScreenState extends State<SearchScreen>
                     color: Theme.of(context).buttonTheme.colorScheme?.onPrimary,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -162,6 +165,7 @@ class _SearchScreenState extends State<SearchScreen>
     ];
   }
 
+  // グリッド上に表示される友達がアップロードした写真
   Widget buildFriendsPhoto() {
     return GridView.builder(
       shrinkWrap: true,
@@ -349,9 +353,36 @@ class _SearchScreenState extends State<SearchScreen>
     } else {
       _updateLocationInfoThenFocusNoDelay();
     }
-
+    updateNearShops();
     // TODO: implement initState
     super.initState();
+  }
+
+  void updateNearShops() async {
+    await _updateLocationInfo();
+    // 更新できたら現在地にフォーカス
+    if (currentPosition != null) {
+      _animatedMapController.centerOnPoint(currentPosition!);
+
+      final fetchedShops = await fetchShops(
+        currentPosition!.latitude,
+        currentPosition!.longitude,
+      );
+      tags = [];
+      for (var restaurant in fetchedShops) {
+        // 見つけたお店のジャンルをtagsに追加する。
+        if (restaurant.genre != null) {
+          if (!tags.contains(restaurant.genre)) {
+            setState(() {
+              tags.add(restaurant.genre!);
+            });
+          }
+        }
+
+        continue;
+      }
+      setState(() => restaurants = fetchedShops);
+    }
   }
 
   @override
@@ -363,6 +394,8 @@ class _SearchScreenState extends State<SearchScreen>
             options: MapOptions(
               initialCenter: _defaultPosition, //初期位置
               initialZoom: 12.0,
+              maxZoom: 17,
+              minZoom: 6,
             ),
             mapController: _animatedMapController.mapController,
             children: [
@@ -372,6 +405,8 @@ class _SearchScreenState extends State<SearchScreen>
 
               MarkerClusterLayerWidget(
                 options: MarkerClusterLayerOptions(
+                  rotate: true,
+
                   builder: (context, marker) {
                     return Container(
                       decoration: const BoxDecoration(
@@ -403,31 +438,8 @@ class _SearchScreenState extends State<SearchScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           FloatingActionButton(
-            onPressed: () async {
-              await _updateLocationInfo();
-              // 更新できたら現在地にフォーカス
-              if (currentPosition != null) {
-                _animatedMapController.centerOnPoint(currentPosition!);
-
-                final fetchedShops = await fetchShops(
-                  currentPosition!.latitude,
-                  currentPosition!.longitude,
-                );
-                tags = [];
-                for (var restaurant in fetchedShops) {
-                  // 見つけたお店のジャンルをtagsに追加する。
-                  if (restaurant.genre != null) {
-                    if (!tags.contains(restaurant.genre)) {
-                      setState(() {
-                        tags.add(restaurant.genre!);
-                      });
-                    }
-                  }
-
-                  continue;
-                }
-                setState(() => restaurants = fetchedShops);
-              }
+            onPressed: () {
+              updateNearShops();
             },
             child: const Icon(Icons.gps_fixed),
           ),
