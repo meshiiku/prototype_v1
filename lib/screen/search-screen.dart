@@ -84,6 +84,147 @@ class _SearchScreenState extends State<SearchScreen>
     }
   }
 
+  // モーダル内に表示される飲食店の情報
+  List<Widget> buildModalRestaurantInfo(
+    BuildContext context,
+    Restaurant restaurant,
+  ) {
+    return [
+      Padding(
+        padding: const EdgeInsets.all(6),
+        child: UserCard(
+          profile: UserProfile(
+            username: restaurant.name,
+            hashtags: ["焼肉", "ガツガツ系", "うどん"],
+            profileImage: restaurant.logo_image,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(left: 15),
+        child: Row(
+          children: [
+            Icon(
+              Icons.people,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+            ),
+            const SizedBox(width: 7),
+            const Text("4人が興味を持っています"),
+          ],
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(left: 6, top: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 5, right: 5),
+                child: Container(
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).buttonTheme.colorScheme?.onPrimary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(child: Text("友達とメシイク")),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: Container(
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).buttonTheme.colorScheme?.onPrimary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.favorite,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                          size: 17,
+                        ),
+                        const SizedBox(width: 5),
+                        const Text("いいね"),
+                        const SizedBox(width: 5),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
+  }
+
+  Widget buildFriendsPhoto() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3, // 列数
+        crossAxisSpacing: 1, // 列間のスペース
+        mainAxisSpacing: 1, // 行間のスペース
+      ),
+      itemCount: 20,
+      itemBuilder: (context, index) {
+        return const Stack(
+          children: [
+            Card(
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Image(
+                  image: NetworkImage(
+                    "https://liginc.co.jp/wp-content/uploads/2014/10/unagi.jpg",
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: EdgeInsets.all(6),
+                child: CircleAvatar(radius: 16),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // 飲食店をタップした時に表示されるモーダルの実装
+  Widget buildRestaurantModal(BuildContext context, Restaurant restaurant) {
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(color: Theme.of(context).cardColor),
+          child: ListView(
+            children: [
+              const SizedBox(height: 15),
+              // このお店の情報
+              ...buildModalRestaurantInfo(context, restaurant),
+              const SizedBox(height: 10),
+              const Divider(),
+              const SizedBox(height: 10),
+              // 友人がこのお店で撮影した写真
+              Padding(padding: EdgeInsets.all(5), child: buildFriendsPhoto()),
+              const SizedBox(height: 70),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   // 飲食店のリストを受け取りマーカーをビルドする
   List<Marker> buildRestaurantMarkers(List<Restaurant> restaurants) {
     return [
@@ -96,142 +237,8 @@ class _SearchScreenState extends State<SearchScreen>
             onTap: () {
               showBarModalBottomSheet(
                 context: context,
-
-                builder:
-                    (context) => Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                      ),
-                      child: ListView(
-                        children: [
-                          SizedBox(height: 15),
-
-                          Padding(
-                            padding: EdgeInsets.all(6),
-                            child: UserCard(
-                              profile: UserProfile(
-                                username: restaurant.name,
-                                hashtags: ["焼肉", "ガツガツ系", "うどん"],
-                                profileImage: restaurant.logo_image,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.people,
-                                  color:
-                                      Theme.of(
-                                        context,
-                                      ).textTheme.bodyLarge?.color,
-                                ),
-                                SizedBox(width: 7),
-                                Text("4人が興味を持っています"),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 6, top: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 5, right: 5),
-                                    child: Container(
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Theme.of(context)
-                                                .buttonTheme
-                                                .colorScheme
-                                                ?.onPrimary,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(child: Text("友達とメシイク")),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 5, right: 5),
-                                    child: Container(
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Theme.of(context)
-                                                .buttonTheme
-                                                .colorScheme
-                                                ?.onPrimary,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(
-                                              Icons.favorite,
-                                              color:
-                                                  Theme.of(
-                                                    context,
-                                                  ).textTheme.bodyLarge?.color,
-                                              size: 17,
-                                            ),
-                                            SizedBox(width: 5),
-                                            Text("いいね"),
-                                            SizedBox(width: 5),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Divider(),
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3, // 列数
-                                  crossAxisSpacing: 1, // 列間のスペース
-                                  mainAxisSpacing: 1, // 行間のスペース
-                                ),
-                            itemCount: 20,
-                            itemBuilder: (context, index) {
-                              return Stack(
-                                children: [
-                                  Card(
-                                    child: AspectRatio(
-                                      aspectRatio: 1,
-                                      child: Image(
-                                        image: NetworkImage(
-                                          "https://liginc.co.jp/wp-content/uploads/2014/10/unagi.jpg",
-                                        ),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(6),
-                                      child: CircleAvatar(radius: 16),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+                enableDrag: false,
+                builder: (context) => buildRestaurantModal(context, restaurant),
               );
             },
             child: CircleAvatar(
