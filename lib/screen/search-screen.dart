@@ -5,8 +5,11 @@ import "package:flutter_map_animations/flutter_map_animations.dart";
 import "package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart";
 import "package:geolocator/geolocator.dart";
 import "package:latlong2/latlong.dart";
+import "package:modal_bottom_sheet/modal_bottom_sheet.dart";
 import "package:prototype_v1/components/osm_copyright.dart";
+import "package:prototype_v1/components/user_card.dart";
 import "package:prototype_v1/model/restaurant.dart";
+import "package:prototype_v1/model/user_profile.dart";
 import "package:prototype_v1/service/hotpepper-api-client.dart";
 import "package:prototype_v1/state.dart";
 
@@ -85,18 +88,59 @@ class _SearchScreenState extends State<SearchScreen>
   List<Marker> buildRestaurantMarkers(List<Restaurant> restaurants) {
     return [
       ...restaurants.map(
-        (shop) => Marker(
+        (restaurant) => Marker(
           width: 40,
           height: 40,
-          point: LatLng(shop.lat, shop.lng),
-          child: CircleAvatar(
-            radius: 20,
+          point: LatLng(restaurant.lat, restaurant.lng),
+          child: GestureDetector(
+            onTap: () {
+              showBarModalBottomSheet(
+                context: context,
+                builder:
+                    (context) => Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 15),
+
+                          Padding(
+                            padding: EdgeInsets.all(6),
+                            child: UserCard(
+                              profile: UserProfile(
+                                username: restaurant.name,
+                                hashtags: ["焼肉", "ガツガツ系", "うどん"],
+                                profileImage: restaurant.logo_image,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 30,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder:
+                                  (context, index) => Padding(
+                                    padding: EdgeInsets.all(2),
+                                    child: Container(child: Text("data")),
+                                  ),
+                              itemCount: 3,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+              );
+            },
             child: CircleAvatar(
-              radius: 19,
-              backgroundImage:
-                  shop.logo_image != null
-                      ? NetworkImage(shop.logo_image!)
-                      : null,
+              radius: 20,
+              child: CircleAvatar(
+                radius: 19,
+                backgroundImage:
+                    restaurant.logo_image != null
+                        ? NetworkImage(restaurant.logo_image!)
+                        : null,
+              ),
             ),
           ),
         ),
