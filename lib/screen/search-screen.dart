@@ -94,7 +94,8 @@ class _SearchScreenState extends State<SearchScreen>
         padding: const EdgeInsets.all(6),
         child: UserCard(
           profile: UserProfile(
-            username: restaurant.name,
+            user_id: restaurant.name,
+
             hashtags: ["焼肉", "ガツガツ系", "うどん"],
             profileImage: restaurant.logo_image,
           ),
