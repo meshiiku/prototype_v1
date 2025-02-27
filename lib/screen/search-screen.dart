@@ -107,7 +107,7 @@ class _SearchScreenState extends State<SearchScreen>
         ),
       ),
       Padding(
-        padding: EdgeInsets.only(left: 15),
+        padding: const EdgeInsets.only(left: 15),
         child: Row(
           children: [
             Icon(
@@ -120,13 +120,13 @@ class _SearchScreenState extends State<SearchScreen>
         ),
       ),
       Padding(
-        padding: EdgeInsets.only(left: 6, top: 12),
+        padding: const EdgeInsets.only(left: 6, top: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 5, right: 5),
+                padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Container(
                   height: 35,
                   decoration: BoxDecoration(
@@ -150,9 +150,9 @@ class _SearchScreenState extends State<SearchScreen>
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(width: 5),
-                        const Text("イキタイリストに追加"),
-                        const SizedBox(width: 5),
+                        SizedBox(width: 5),
+                        Text("イキタイリストに追加"),
+                        SizedBox(width: 5),
                       ],
                     ),
                   ),
@@ -191,7 +191,7 @@ class _SearchScreenState extends State<SearchScreen>
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                padding: EdgeInsets.all(6),
+                padding: const EdgeInsets.all(6),
                 child: CircleAvatar(
                   radius: 16,
                   backgroundImage: NetworkImage(
@@ -221,7 +221,10 @@ class _SearchScreenState extends State<SearchScreen>
               const Divider(),
               const SizedBox(height: 10),
               // 友人がこのお店で撮影した写真
-              Padding(padding: EdgeInsets.all(5), child: buildFriendsPhoto()),
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: buildFriendsPhoto(),
+              ),
               const SizedBox(height: 70),
             ],
           ),
@@ -372,7 +375,7 @@ class _SearchScreenState extends State<SearchScreen>
                   borderRadius: BorderRadius.circular(6.0),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(9),
+                  padding: const EdgeInsets.all(9),
                   child: Center(child: Text(tags[index])),
                 ),
               ),
