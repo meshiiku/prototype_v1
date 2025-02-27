@@ -6,6 +6,7 @@ import "package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart";
 import "package:geolocator/geolocator.dart";
 import "package:latlong2/latlong.dart";
 import "package:modal_bottom_sheet/modal_bottom_sheet.dart";
+import "package:prototype_v1/components/osm_copyright.dart";
 import "package:prototype_v1/model/restaurant.dart";
 import "package:prototype_v1/service/hotpepper-api-client.dart";
 
@@ -57,7 +58,8 @@ class _SearchScreenState extends State<SearchScreen>
     }
   }
 
-  List<Marker> buildRestaurantMarkers() {
+  // 飲食店のリストを受け取りマーカーをビルドする
+  List<Marker> buildRestaurantMarkers(List<Restaurant> restaurants) {
     return [
       ...restaurants.map(
         (shop) => Marker(
@@ -79,7 +81,11 @@ class _SearchScreenState extends State<SearchScreen>
     ];
   }
 
-  Marker buildLocationMarker() {
+  // 現在地マーカーのビルド
+  Marker buildCurrentLocationMarker() {
+    // 現在地がわからなければ表示しない
+    if (_currentPosition == null)
+      return Marker(point: _defaultPosition, child: Container());
     return Marker(
       width: 20,
       height: 20,
@@ -91,7 +97,7 @@ class _SearchScreenState extends State<SearchScreen>
           boxShadow: [BoxShadow(color: Colors.blue, blurRadius: 6)],
         ),
         child: Container(
-          margin: EdgeInsets.all(2),
+          margin: const EdgeInsets.all(2),
           width: 5,
           height: 5,
           decoration: const BoxDecoration(
@@ -99,6 +105,59 @@ class _SearchScreenState extends State<SearchScreen>
             shape: BoxShape.circle,
           ),
         ),
+      ),
+    );
+  }
+
+  // 上の検索バー
+  Widget buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(9),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).scaffoldBackgroundColor.withAlpha(0x50),
+              blurRadius: 9,
+            ),
+          ],
+        ),
+        child: TextField(
+          decoration: InputDecoration(
+            filled: true,
+            hintText: "検索する",
+            fillColor: Theme.of(context).scaffoldBackgroundColor,
+            prefixIcon: const Icon(Icons.search),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 検索バーしたのサジェスト（簡易検索）
+  Widget buildSuggestSearch() {
+    return SizedBox(
+      height: 40,
+      child: ListView.builder(
+        itemBuilder:
+            (context, index) => Padding(
+              padding: const EdgeInsets.only(left: 9.0),
+              child: Container(
+                width: 100,
+                child: Center(child: Text("#data")),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+              ),
+            ),
+        scrollDirection: Axis.horizontal,
+
+        itemCount: 10,
       ),
     );
   }
@@ -133,81 +192,18 @@ class _SearchScreenState extends State<SearchScreen>
                       child: Center(child: Text(marker.length.toString())),
                     );
                   },
-                  markers: buildRestaurantMarkers(),
+                  markers: buildRestaurantMarkers(restaurants),
                 ),
               ),
-              MarkerLayer(markers: [buildLocationMarker()]),
+              MarkerLayer(markers: [buildCurrentLocationMarker()]),
             ],
           ),
+
           // コピーライト表示（必要）
           // 参考： https://www.openstreetmap.org/copyright/ja
-          const Align(
-            alignment: Alignment.bottomLeft,
-            child: SafeArea(
-              child: const Padding(
-                padding: EdgeInsets.all(7),
-                child: Text(
-                  "©︎ OpenStreetMap contributors",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          const OSMCopyRightWidget(),
           SafeArea(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(9),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(
-                            context,
-                          ).scaffoldBackgroundColor.withAlpha(0x50),
-                          blurRadius: 9,
-                        ),
-                      ],
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        hintText: "検索する",
-                        fillColor: Theme.of(context).scaffoldBackgroundColor,
-                        prefixIcon: Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                  child: ListView.builder(
-                    itemBuilder:
-                        (context, index) => Padding(
-                          padding: EdgeInsets.only(left: 9.0),
-                          child: Container(
-                            width: 100,
-                            child: Center(child: Text("#data")),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              borderRadius: BorderRadius.circular(6.0),
-                            ),
-                          ),
-                        ),
-                    scrollDirection: Axis.horizontal,
-
-                    itemCount: 10,
-                  ),
-                ),
-              ],
-            ),
+            child: Column(children: [buildSearchBar(), buildSuggestSearch()]),
           ),
         ],
       ),
