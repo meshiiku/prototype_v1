@@ -9,6 +9,7 @@ import "package:modal_bottom_sheet/modal_bottom_sheet.dart";
 import "package:prototype_v1/components/osm_copyright.dart";
 import "package:prototype_v1/model/restaurant.dart";
 import "package:prototype_v1/service/hotpepper-api-client.dart";
+import "package:prototype_v1/state.dart";
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -19,7 +20,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen>
     with TickerProviderStateMixin {
-  LatLng? _currentPosition;
   final LatLng _defaultPosition = const LatLng(
     43.062087,
     141.354404,
@@ -51,10 +51,34 @@ class _SearchScreenState extends State<SearchScreen>
       // 位置を取得
       Position position = await Geolocator.getCurrentPosition();
       setState(() {
-        _currentPosition = LatLng(position.latitude, position.longitude);
+        currentPosition = LatLng(position.latitude, position.longitude);
       });
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  // 現在地を更新して、フォーカスする。
+  void _updateLocationInfoThenFocus() async {
+    await _updateLocationInfo();
+    if (currentPosition != null) {
+      await _animatedMapController.centerOnPoint(
+        currentPosition!,
+        zoom: 16,
+        duration: Duration(seconds: 1),
+      );
+    }
+  }
+
+  // 現在地を更新して、フォーカスする。
+  void _updateLocationInfoThenFocusNoDelay() async {
+    await _updateLocationInfo();
+    if (currentPosition != null) {
+      await _animatedMapController.centerOnPoint(
+        currentPosition!,
+        zoom: 16,
+        duration: Duration(seconds: 0),
+      );
     }
   }
 
@@ -84,12 +108,12 @@ class _SearchScreenState extends State<SearchScreen>
   // 現在地マーカーのビルド
   Marker buildCurrentLocationMarker() {
     // 現在地がわからなければ表示しない
-    if (_currentPosition == null)
+    if (currentPosition == null)
       return Marker(point: _defaultPosition, child: Container());
     return Marker(
       width: 20,
       height: 20,
-      point: _currentPosition ?? _defaultPosition,
+      point: currentPosition ?? _defaultPosition,
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -163,6 +187,17 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   @override
+  void initState() {
+    if (currentPosition == null) {
+      _updateLocationInfoThenFocus();
+    } else
+      _updateLocationInfoThenFocusNoDelay();
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -170,7 +205,7 @@ class _SearchScreenState extends State<SearchScreen>
           FlutterMap(
             options: MapOptions(
               initialCenter: _defaultPosition, //初期位置
-              initialZoom: 10.0,
+              initialZoom: 12.0,
             ),
             mapController: _animatedMapController.mapController,
             children: [
@@ -214,12 +249,12 @@ class _SearchScreenState extends State<SearchScreen>
             onPressed: () async {
               await _updateLocationInfo();
               // 更新できたら現在地にフォーカス
-              if (_currentPosition != null) {
-                _animatedMapController.centerOnPoint(_currentPosition!);
+              if (currentPosition != null) {
+                _animatedMapController.centerOnPoint(currentPosition!);
 
                 final fetched_shops = await fetchShops(
-                  _currentPosition!.latitude,
-                  _currentPosition!.longitude,
+                  currentPosition!.latitude,
+                  currentPosition!.longitude,
                 );
 
                 setState(() => restaurants = fetched_shops);
