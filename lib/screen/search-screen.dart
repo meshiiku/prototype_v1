@@ -293,30 +293,68 @@ class _SearchScreenState extends State<SearchScreen>
 
   // 上の検索バー
   Widget buildSearchBar() {
-    return Padding(
-      padding: const EdgeInsets.all(9),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).scaffoldBackgroundColor.withAlpha(0x50),
-              blurRadius: 9,
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 70,
+            top: 10,
+            bottom: 10,
+            right: 10,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(
+                    context,
+                  ).scaffoldBackgroundColor.withAlpha(0x50),
+                  blurRadius: 9,
+                ),
+              ],
             ),
-          ],
-        ),
-        child: TextField(
-          decoration: InputDecoration(
-            filled: true,
-            hintText: "検索する",
-            fillColor: Theme.of(context).scaffoldBackgroundColor,
-            prefixIcon: const Icon(Icons.search),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
+            child: TextField(
+              decoration: InputDecoration(
+                filled: true,
+                hintText: "検索する",
+                fillColor: Theme.of(context).scaffoldBackgroundColor,
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
           ),
         ),
-      ),
+        Positioned(
+          left: 1,
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Material(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              color: Theme.of(context).primaryColor,
+              child: InkWell(
+                onTap: () {},
+
+                child: Container(
+                  width: 50, // ボタンの幅
+                  height: 50, // ボタンの高さ
+                  alignment: Alignment.center,
+                  child: Icon(
+                    Icons.smart_toy_rounded,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
