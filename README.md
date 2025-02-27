@@ -1,16 +1,26 @@
 # prototype_v1
 
-A new Flutter project.
+Engineer Guild Hackathon 2025に向けて開発中のスマホ向けアプリケーション
 
-## Getting Started
+# 開発環境
 
-This project is a starting point for a Flutter application.
+## APIキーの登録
 
-A few resources to get you started if this is your first Flutter project:
+このアプリではホットペッパーのAPIを使っているため、環境変数にAPIキーを入力する必要があります。
+プロジェクトのルートに`.env`ファイルを作成し以下のように記述してください。
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```
+HOTPEPPER_API_KEY=j2eo32o**********
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+環境変数の設定が終わったら、次はパートファイルを作成します。
+
+```
+flutter pub run build_runner build
+```
+
+## 実行
+
+```
+flutter run 
+```
