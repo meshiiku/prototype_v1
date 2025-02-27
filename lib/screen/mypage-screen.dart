@@ -31,7 +31,6 @@ class _MyPageScreenState extends State<MyPageScreen> {
       }
     });
 
-    // TODO: implement initState
     super.initState();
   }
 

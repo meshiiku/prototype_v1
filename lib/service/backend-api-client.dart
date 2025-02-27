@@ -63,10 +63,10 @@ class BackendAPIClient {
   }
 
   // user_id(hoge12032103)からユーザー情報を取得する
-  Future<String> getUserInfoById(String user_id) async {
+  Future<User> getUserInfoById(String user_id) async {
     final response = await getData("/account/users/" + user_id);
-    // todo: userProfile型に変換
-    return response.data;
+    final user = User.fromJson(response.data);
+    return user;
   }
 
   // ユーザーを検索する
