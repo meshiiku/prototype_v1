@@ -1,13 +1,13 @@
 import "package:dio/dio.dart";
 import "package:flutter/cupertino.dart";
+import "package:prototype_v1/env.dart";
 import "package:prototype_v1/model/user.dart";
 import "package:prototype_v1/saves/jwt.dart";
 
 class BackendAPIClient {
   final Dio _dio = Dio(
     BaseOptions(
-      // TODO: 環境変数にいいれる
-      baseUrl: "http://192.168.1.191:3000",
+      baseUrl: Env.backendBaseUrl,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),

@@ -11,12 +11,13 @@ Engineer Guild Hackathon 2025に向けて開発中のスマホ向けアプリケ
 
 ```
 HOTPEPPER_API_KEY=j2eo32o**********
+BACKEND_BASEURL=http://localhost:3000
 ```
 
 環境変数の設定が終わったら、次はパートファイルを作成します。
 
 ```
-flutter pub run build_runner build
+dart run build_runner build
 ```
 
 ## 実行
