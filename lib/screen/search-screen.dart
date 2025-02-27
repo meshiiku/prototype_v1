@@ -8,6 +8,7 @@ import "package:latlong2/latlong.dart";
 import "package:modal_bottom_sheet/modal_bottom_sheet.dart";
 import "package:prototype_v1/components/osm_copyright.dart";
 import "package:prototype_v1/components/user_card.dart";
+import "package:prototype_v1/model/post.dart";
 import "package:prototype_v1/model/restaurant.dart";
 import "package:prototype_v1/model/user.dart";
 import "package:prototype_v1/service/backend-api-client.dart";
@@ -167,6 +168,7 @@ class _SearchScreenState extends State<SearchScreen>
 
   // グリッド上に表示される友達がアップロードした写真
   Widget buildFriendsPhoto() {
+    // Todo: Postクラスを使って実装する。
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
