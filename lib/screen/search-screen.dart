@@ -102,111 +102,134 @@ class _SearchScreenState extends State<SearchScreen>
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
                       ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 15),
+                      child: ListView(
+                        children: [
+                          SizedBox(height: 15),
 
-                            Padding(
-                              padding: EdgeInsets.all(6),
-                              child: UserCard(
-                                profile: UserProfile(
-                                  username: restaurant.name,
-                                  hashtags: ["焼肉", "ガツガツ系", "うどん"],
-                                  profileImage: restaurant.logo_image,
+                          Padding(
+                            padding: EdgeInsets.all(6),
+                            child: UserCard(
+                              profile: UserProfile(
+                                username: restaurant.name,
+                                hashtags: ["焼肉", "ガツガツ系", "うどん"],
+                                profileImage: restaurant.logo_image,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 15),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.people,
+                                  color:
+                                      Theme.of(
+                                        context,
+                                      ).textTheme.bodyLarge?.color,
                                 ),
-                              ),
+                                SizedBox(width: 7),
+                                Text("4人が興味を持っています"),
+                              ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.people,
-                                    color:
-                                        Theme.of(
-                                          context,
-                                        ).textTheme.bodyLarge?.color,
-                                  ),
-                                  SizedBox(width: 7),
-                                  Text("4人が興味を持っています"),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 6, top: 12),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 6, top: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 5,
-                                        right: 5,
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 5, right: 5),
+                                    child: Container(
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Theme.of(context)
+                                                .buttonTheme
+                                                .colorScheme
+                                                ?.onPrimary,
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: Container(
-                                        height: 35,
-                                        decoration: BoxDecoration(
-                                          color:
-                                              Theme.of(context)
-                                                  .buttonTheme
-                                                  .colorScheme
-                                                  ?.onPrimary,
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
+                                      child: Center(child: Text("友達とメシイク")),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 5, right: 5),
+                                    child: Container(
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Theme.of(context)
+                                                .buttonTheme
+                                                .colorScheme
+                                                ?.onPrimary,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.favorite,
+                                              color:
+                                                  Theme.of(
+                                                    context,
+                                                  ).textTheme.bodyLarge?.color,
+                                              size: 17,
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text("いいね"),
+                                            SizedBox(width: 5),
+                                          ],
                                         ),
-                                        child: Center(child: Text("友達とメシイク")),
                                       ),
                                     ),
                                   ),
-                                  Expanded(
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Divider(),
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3, // 列数
+                                  crossAxisSpacing: 1, // 列間のスペース
+                                  mainAxisSpacing: 1, // 行間のスペース
+                                ),
+                            itemCount: 20,
+                            itemBuilder: (context, index) {
+                              return Stack(
+                                children: [
+                                  Card(
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Image(
+                                        image: NetworkImage(
+                                          "https://liginc.co.jp/wp-content/uploads/2014/10/unagi.jpg",
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
                                     child: Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 5,
-                                        right: 5,
-                                      ),
-                                      child: Container(
-                                        height: 35,
-                                        decoration: BoxDecoration(
-                                          color:
-                                              Theme.of(context)
-                                                  .buttonTheme
-                                                  .colorScheme
-                                                  ?.onPrimary,
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Icon(
-                                                Icons.favorite,
-                                                color:
-                                                    Theme.of(context)
-                                                        .textTheme
-                                                        .bodyLarge
-                                                        ?.color,
-                                                size: 17,
-                                              ),
-                                              SizedBox(width: 5),
-                                              Text("いいね"),
-                                              SizedBox(width: 5),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                      padding: EdgeInsets.all(6),
+                                      child: CircleAvatar(radius: 16),
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                          ],
-                        ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
               );
