@@ -141,13 +141,47 @@ class _SearchScreenState extends State<SearchScreen>
           ),
           // コピーライト表示（必要）
           // 参考： https://www.openstreetmap.org/copyright/ja
-          const Padding(
-            padding: EdgeInsets.all(7),
-            child: Text(
-              "©︎ OpenStreetMap contributors",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+          const Align(
+            alignment: Alignment.bottomLeft,
+            child: SafeArea(
+              child: const Padding(
+                padding: EdgeInsets.all(7),
+                child: Text(
+                  "©︎ OpenStreetMap contributors",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(
+                        context,
+                      ).scaffoldBackgroundColor.withAlpha(0x50),
+                      blurRadius: 9,
+                    ),
+                  ],
+                ),
+                child: TextField(
+                  decoration: InputDecoration(
+                    filled: true,
+                    hintText: "検索する",
+                    fillColor: Theme.of(context).scaffoldBackgroundColor,
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -172,44 +206,6 @@ class _SearchScreenState extends State<SearchScreen>
               }
             },
             child: const Icon(Icons.gps_fixed),
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            heroTag: "search",
-
-            onPressed: () async {
-              showMaterialModalBottomSheet(
-                context: context,
-                expand: false,
-                bounce: true,
-
-                builder:
-                    (context) => SafeArea(
-                      top: false,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            title: const Text('設定とプライバシー'),
-                            leading: const Icon(Icons.settings),
-                            onTap: () => Navigator.of(context).pop(),
-                          ),
-                          ListTile(
-                            title: const Text('アクティビティ'),
-                            leading: const Icon(Icons.history),
-                            onTap: () => Navigator.of(context).pop(),
-                          ),
-                          ListTile(
-                            title: const Text('アーカイブ'),
-                            leading: const Icon(Icons.archive),
-                            onTap: () => Navigator.of(context).pop(),
-                          ),
-                        ],
-                      ),
-                    ),
-              );
-            },
-            child: const Icon(Icons.search),
           ),
         ],
       ),
