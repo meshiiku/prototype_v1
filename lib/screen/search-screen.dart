@@ -28,6 +28,7 @@ class _SearchScreenState extends State<SearchScreen>
     141.354404,
   ); //札幌市をデフォルト座標として使用
   List<Restaurant> restaurants = [];
+  List<String> tags = [];
 
   // マップのアニメーション設定
   late final _animatedMapController = AnimatedMapController(vsync: this);
@@ -324,17 +325,19 @@ class _SearchScreenState extends State<SearchScreen>
             (context, index) => Padding(
               padding: const EdgeInsets.only(left: 9.0),
               child: Container(
-                width: 100,
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(6.0),
                 ),
-                child: const Center(child: Text("#data")),
+                child: Padding(
+                  padding: EdgeInsets.all(9),
+                  child: Center(child: Text(tags[index])),
+                ),
               ),
             ),
         scrollDirection: Axis.horizontal,
 
-        itemCount: 10,
+        itemCount: tags.length,
       ),
     );
   }
@@ -410,7 +413,19 @@ class _SearchScreenState extends State<SearchScreen>
                   currentPosition!.latitude,
                   currentPosition!.longitude,
                 );
+                tags = [];
+                for (var restaurant in fetchedShops) {
+                  // 見つけたお店のジャンルをtagsに追加する。
+                  if (restaurant.genre != null) {
+                    if (!tags.contains(restaurant.genre)) {
+                      setState(() {
+                        tags.add(restaurant.genre!);
+                      });
+                    }
+                  }
 
+                  continue;
+                }
                 setState(() => restaurants = fetchedShops);
               }
             },
