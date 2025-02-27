@@ -5,8 +5,13 @@ import "package:flutter_map_animations/flutter_map_animations.dart";
 import "package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart";
 import "package:geolocator/geolocator.dart";
 import "package:latlong2/latlong.dart";
+import "package:modal_bottom_sheet/modal_bottom_sheet.dart";
+import "package:prototype_v1/components/osm_copyright.dart";
+import "package:prototype_v1/components/user_card.dart";
 import "package:prototype_v1/model/restaurant.dart";
+import "package:prototype_v1/model/user_profile.dart";
 import "package:prototype_v1/service/hotpepper-api-client.dart";
+import "package:prototype_v1/state.dart";
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -17,7 +22,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen>
     with TickerProviderStateMixin {
-  LatLng? _currentPosition;
   final LatLng _defaultPosition = const LatLng(
     43.062087,
     141.354404,
@@ -49,28 +53,203 @@ class _SearchScreenState extends State<SearchScreen>
       // 位置を取得
       Position position = await Geolocator.getCurrentPosition();
       setState(() {
-        _currentPosition = LatLng(position.latitude, position.longitude);
+        currentPosition = LatLng(position.latitude, position.longitude);
       });
     } catch (e) {
       debugPrint(e.toString());
     }
   }
 
-  List<Marker> buildRestaurantMarkers() {
+  // 現在地を更新して、フォーカスする。
+  void _updateLocationInfoThenFocus() async {
+    await _updateLocationInfo();
+    if (currentPosition != null) {
+      await _animatedMapController.centerOnPoint(
+        currentPosition!,
+        zoom: 16,
+        duration: const Duration(seconds: 1),
+      );
+    }
+  }
+
+  // 現在地を更新して、フォーカスする。
+  void _updateLocationInfoThenFocusNoDelay() async {
+    await _updateLocationInfo();
+    if (currentPosition != null) {
+      await _animatedMapController.centerOnPoint(
+        currentPosition!,
+        zoom: 16,
+        duration: const Duration(seconds: 0),
+      );
+    }
+  }
+
+  // モーダル内に表示される飲食店の情報
+  List<Widget> buildModalRestaurantInfo(
+    BuildContext context,
+    Restaurant restaurant,
+  ) {
+    return [
+      Padding(
+        padding: const EdgeInsets.all(6),
+        child: UserCard(
+          profile: UserProfile(
+            username: restaurant.name,
+            hashtags: ["焼肉", "ガツガツ系", "うどん"],
+            profileImage: restaurant.logo_image,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(left: 15),
+        child: Row(
+          children: [
+            Icon(
+              Icons.people,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+            ),
+            const SizedBox(width: 7),
+            const Text("4人が興味を持っています"),
+          ],
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(left: 6, top: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 5, right: 5),
+                child: Container(
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).buttonTheme.colorScheme?.onPrimary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(child: Text("友達とメシイク")),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: Container(
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).buttonTheme.colorScheme?.onPrimary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.favorite,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                          size: 17,
+                        ),
+                        const SizedBox(width: 5),
+                        const Text("いいね"),
+                        const SizedBox(width: 5),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
+  }
+
+  Widget buildFriendsPhoto() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3, // 列数
+        crossAxisSpacing: 1, // 列間のスペース
+        mainAxisSpacing: 1, // 行間のスペース
+      ),
+      itemCount: 20,
+      itemBuilder: (context, index) {
+        return const Stack(
+          children: [
+            Card(
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Image(
+                  image: NetworkImage(
+                    "https://liginc.co.jp/wp-content/uploads/2014/10/unagi.jpg",
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: EdgeInsets.all(6),
+                child: CircleAvatar(radius: 16),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // 飲食店をタップした時に表示されるモーダルの実装
+  Widget buildRestaurantModal(BuildContext context, Restaurant restaurant) {
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(color: Theme.of(context).cardColor),
+          child: ListView(
+            children: [
+              const SizedBox(height: 15),
+              // このお店の情報
+              ...buildModalRestaurantInfo(context, restaurant),
+              const SizedBox(height: 10),
+              const Divider(),
+              const SizedBox(height: 10),
+              // 友人がこのお店で撮影した写真
+              Padding(padding: EdgeInsets.all(5), child: buildFriendsPhoto()),
+              const SizedBox(height: 70),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // 飲食店のリストを受け取りマーカーをビルドする
+  List<Marker> buildRestaurantMarkers(List<Restaurant> restaurants) {
     return [
       ...restaurants.map(
-        (shop) => Marker(
+        (restaurant) => Marker(
           width: 40,
           height: 40,
-          point: LatLng(shop.lat, shop.lng),
-          child: CircleAvatar(
-            radius: 20,
+          point: LatLng(restaurant.lat, restaurant.lng),
+          child: GestureDetector(
+            onTap: () {
+              showBarModalBottomSheet(
+                context: context,
+                enableDrag: false,
+                builder: (context) => buildRestaurantModal(context, restaurant),
+              );
+            },
             child: CircleAvatar(
-              radius: 19,
-              backgroundImage:
-                  shop.logo_image != null
-                      ? NetworkImage(shop.logo_image!)
-                      : null,
+              radius: 20,
+              child: CircleAvatar(
+                radius: 19,
+                backgroundImage:
+                    restaurant.logo_image != null
+                        ? NetworkImage(restaurant.logo_image!)
+                        : null,
+              ),
             ),
           ),
         ),
@@ -78,11 +257,16 @@ class _SearchScreenState extends State<SearchScreen>
     ];
   }
 
-  Marker buildLocationMarker() {
+  // 現在地マーカーのビルド
+  Marker buildCurrentLocationMarker() {
+    // 現在地がわからなければ表示しない
+    if (currentPosition == null) {
+      return Marker(point: _defaultPosition, child: Container());
+    }
     return Marker(
       width: 20,
       height: 20,
-      point: _currentPosition ?? _defaultPosition,
+      point: currentPosition ?? _defaultPosition,
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -90,7 +274,7 @@ class _SearchScreenState extends State<SearchScreen>
           boxShadow: [BoxShadow(color: Colors.blue, blurRadius: 6)],
         ),
         child: Container(
-          margin: EdgeInsets.all(2),
+          margin: const EdgeInsets.all(2),
           width: 5,
           height: 5,
           decoration: const BoxDecoration(
@@ -102,6 +286,71 @@ class _SearchScreenState extends State<SearchScreen>
     );
   }
 
+  // 上の検索バー
+  Widget buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(9),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).scaffoldBackgroundColor.withAlpha(0x50),
+              blurRadius: 9,
+            ),
+          ],
+        ),
+        child: TextField(
+          decoration: InputDecoration(
+            filled: true,
+            hintText: "検索する",
+            fillColor: Theme.of(context).scaffoldBackgroundColor,
+            prefixIcon: const Icon(Icons.search),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 検索バーしたのサジェスト（簡易検索）
+  Widget buildSuggestSearch() {
+    return SizedBox(
+      height: 40,
+      child: ListView.builder(
+        itemBuilder:
+            (context, index) => Padding(
+              padding: const EdgeInsets.only(left: 9.0),
+              child: Container(
+                width: 100,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                child: const Center(child: Text("#data")),
+              ),
+            ),
+        scrollDirection: Axis.horizontal,
+
+        itemCount: 10,
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    if (currentPosition == null) {
+      _updateLocationInfoThenFocus();
+    } else {
+      _updateLocationInfoThenFocusNoDelay();
+    }
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,7 +359,7 @@ class _SearchScreenState extends State<SearchScreen>
           FlutterMap(
             options: MapOptions(
               initialCenter: _defaultPosition, //初期位置
-              initialZoom: 10.0,
+              initialZoom: 12.0,
             ),
             mapController: _animatedMapController.mapController,
             children: [
@@ -132,42 +381,42 @@ class _SearchScreenState extends State<SearchScreen>
                       child: Center(child: Text(marker.length.toString())),
                     );
                   },
-                  markers: buildRestaurantMarkers(),
+                  markers: buildRestaurantMarkers(restaurants),
                 ),
               ),
-              MarkerLayer(markers: [buildLocationMarker()]),
+              MarkerLayer(markers: [buildCurrentLocationMarker()]),
             ],
           ),
+
           // コピーライト表示（必要）
           // 参考： https://www.openstreetmap.org/copyright/ja
-          const Padding(
-            padding: EdgeInsets.all(7),
-            child: Text(
-              "©︎ OpenStreetMap contributors",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          const OSMCopyRightWidget(),
+          SafeArea(
+            child: Column(children: [buildSearchBar(), buildSuggestSearch()]),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await _updateLocationInfo();
-          // 更新できたら現在地にフォーカス
-          if (_currentPosition != null) {
-            _animatedMapController.centerOnPoint(_currentPosition!);
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            onPressed: () async {
+              await _updateLocationInfo();
+              // 更新できたら現在地にフォーカス
+              if (currentPosition != null) {
+                _animatedMapController.centerOnPoint(currentPosition!);
 
-            final fetched_shops = await fetchShops(
-              _currentPosition!.latitude,
-              _currentPosition!.longitude,
-            );
+                final fetchedShops = await fetchShops(
+                  currentPosition!.latitude,
+                  currentPosition!.longitude,
+                );
 
-            setState(() => restaurants = fetched_shops);
-          }
-        },
-        child: const Icon(Icons.gps_fixed),
+                setState(() => restaurants = fetchedShops);
+              }
+            },
+            child: const Icon(Icons.gps_fixed),
+          ),
+        ],
       ),
     );
   }

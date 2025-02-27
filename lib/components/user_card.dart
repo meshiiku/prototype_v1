@@ -12,7 +12,7 @@ class UserCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(),
       shadowColor: Colors.transparent,
-      color: Theme.of(context).scaffoldBackgroundColor,
+      color: Colors.transparent,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -21,7 +21,13 @@ class UserCard extends StatelessWidget {
             margin: EdgeInsets.all(2),
             child: Row(
               children: [
-                CircleAvatar(radius: 26),
+                CircleAvatar(
+                  radius: 26,
+                  backgroundImage:
+                      profile.profileImage != null
+                          ? NetworkImage(profile.profileImage!)
+                          : null,
+                ),
                 SizedBox(width: 14),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +56,6 @@ class UserCard extends StatelessWidget {
                                     top: 4,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).hoverColor,
                                     shape: BoxShape.rectangle,
                                     borderRadius: BorderRadius.circular(2.0),
                                   ),

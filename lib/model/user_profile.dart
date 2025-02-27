@@ -1,6 +1,11 @@
 class UserProfile {
   String username; // ユーザー名
   List<String> hashtags; // ハッシュタグ
+  String? profileImage;
 
-  UserProfile(this.username, this.hashtags);
+  UserProfile({
+    required this.username,
+    required this.hashtags,
+    this.profileImage,
+  });
 }
