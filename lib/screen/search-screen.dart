@@ -157,32 +157,56 @@ class _SearchScreenState extends State<SearchScreen>
             ),
           ),
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(
-                        context,
-                      ).scaffoldBackgroundColor.withAlpha(0x50),
-                      blurRadius: 9,
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(9),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(
+                            context,
+                          ).scaffoldBackgroundColor.withAlpha(0x50),
+                          blurRadius: 9,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    hintText: "検索する",
-                    fillColor: Theme.of(context).scaffoldBackgroundColor,
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        filled: true,
+                        hintText: "検索する",
+                        fillColor: Theme.of(context).scaffoldBackgroundColor,
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+                SizedBox(
+                  height: 40,
+                  child: ListView.builder(
+                    itemBuilder:
+                        (context, index) => Padding(
+                          padding: EdgeInsets.only(left: 9.0),
+                          child: Container(
+                            width: 100,
+                            child: Center(child: Text("#data")),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              borderRadius: BorderRadius.circular(6.0),
+                            ),
+                          ),
+                        ),
+                    scrollDirection: Axis.horizontal,
+
+                    itemCount: 10,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
