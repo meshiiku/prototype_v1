@@ -96,38 +96,117 @@ class _SearchScreenState extends State<SearchScreen>
             onTap: () {
               showBarModalBottomSheet(
                 context: context,
+
                 builder:
                     (context) => Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
                       ),
-                      child: Column(
-                        children: [
-                          SizedBox(height: 15),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 15),
 
-                          Padding(
-                            padding: EdgeInsets.all(6),
-                            child: UserCard(
-                              profile: UserProfile(
-                                username: restaurant.name,
-                                hashtags: ["焼肉", "ガツガツ系", "うどん"],
-                                profileImage: restaurant.logo_image,
+                            Padding(
+                              padding: EdgeInsets.all(6),
+                              child: UserCard(
+                                profile: UserProfile(
+                                  username: restaurant.name,
+                                  hashtags: ["焼肉", "ガツガツ系", "うどん"],
+                                  profileImage: restaurant.logo_image,
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 30,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder:
-                                  (context, index) => Padding(
-                                    padding: EdgeInsets.all(2),
-                                    child: Container(child: Text("data")),
+                            Padding(
+                              padding: EdgeInsets.only(left: 15),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.people,
+                                    color:
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.bodyLarge?.color,
                                   ),
-                              itemCount: 3,
+                                  SizedBox(width: 7),
+                                  Text("4人が興味を持っています"),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: EdgeInsets.only(left: 6, top: 12),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        left: 5,
+                                        right: 5,
+                                      ),
+                                      child: Container(
+                                        height: 35,
+                                        decoration: BoxDecoration(
+                                          color:
+                                              Theme.of(context)
+                                                  .buttonTheme
+                                                  .colorScheme
+                                                  ?.onPrimary,
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                        child: Center(child: Text("友達とメシイク")),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        left: 5,
+                                        right: 5,
+                                      ),
+                                      child: Container(
+                                        height: 35,
+                                        decoration: BoxDecoration(
+                                          color:
+                                              Theme.of(context)
+                                                  .buttonTheme
+                                                  .colorScheme
+                                                  ?.onPrimary,
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                Icons.favorite,
+                                                color:
+                                                    Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge
+                                                        ?.color,
+                                                size: 17,
+                                              ),
+                                              SizedBox(width: 5),
+                                              Text("いいね"),
+                                              SizedBox(width: 5),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
               );
