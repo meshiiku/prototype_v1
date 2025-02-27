@@ -2,13 +2,13 @@ class Restaurant {
   final String name;
   final double lat;
   final double lng;
-  String? logo_image;
+  String? logoImage;
 
   Restaurant({
     required this.name,
     required this.lat,
     required this.lng,
-    this.logo_image,
+    this.logoImage,
   });
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
@@ -16,7 +16,7 @@ class Restaurant {
       name: json['name'],
       lat: (json['lat']),
       lng: (json['lng']),
-      logo_image: json["logo_image"],
+      logoImage: json["logo_image"],
     );
   }
 }
