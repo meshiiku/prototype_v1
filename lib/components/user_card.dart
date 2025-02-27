@@ -21,7 +21,13 @@ class UserCard extends StatelessWidget {
             margin: EdgeInsets.all(2),
             child: Row(
               children: [
-                CircleAvatar(radius: 26),
+                CircleAvatar(
+                  radius: 26,
+                  backgroundImage:
+                      profile.profileImage != null
+                          ? NetworkImage(profile.profileImage!)
+                          : null,
+                ),
                 SizedBox(width: 14),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

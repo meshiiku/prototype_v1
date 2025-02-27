@@ -11,7 +11,12 @@ class MyPageScreen extends StatelessWidget {
     // TODO: implement build
     return ListView(
       children: [
-        UserCard(profile: UserProfile("username", ["ラーメン"])),
+        UserCard(
+          profile: UserProfile(
+            username: "太郎",
+            hashtags: ["焼肉", "ガツガツ系", "うどん"],
+          ),
+        ),
       ],
     );
   }
