@@ -1,3 +1,5 @@
+import "dart:math";
+
 import "package:dio/dio.dart";
 import "package:flutter/cupertino.dart";
 import "package:prototype_v1/env.dart";
@@ -75,5 +77,15 @@ class BackendAPIClient {
     final List<dynamic> json = response.data;
     final users = json.map((item) => User.fromJson(item));
     return users.toList();
+  }
+
+  // ランダムなラーメンの画像を持ってくる
+  static String randomRamenImageUrl() {
+    return "${Env.backendBaseUrl}/static/${Random().nextInt(11) + 1}.jpg";
+  }
+
+  // ランダムなラーメンの画像を持ってくる
+  static String randomRamenIconUrl() {
+    return "${Env.backendBaseUrl}/static/random_icons/${Random().nextInt(5) + 1}.png";
   }
 }

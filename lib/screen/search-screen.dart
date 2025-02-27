@@ -10,6 +10,7 @@ import "package:prototype_v1/components/osm_copyright.dart";
 import "package:prototype_v1/components/user_card.dart";
 import "package:prototype_v1/model/restaurant.dart";
 import "package:prototype_v1/model/user.dart";
+import "package:prototype_v1/service/backend-api-client.dart";
 import "package:prototype_v1/service/hotpepper-api-client.dart";
 import "package:prototype_v1/state.dart";
 
@@ -145,13 +146,8 @@ class _SearchScreenState extends State<SearchScreen>
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          Icons.favorite,
-                          color: Theme.of(context).textTheme.bodyLarge?.color,
-                          size: 17,
-                        ),
                         const SizedBox(width: 5),
-                        const Text("いいね"),
+                        const Text("イキタイリストに追加"),
                         const SizedBox(width: 5),
                       ],
                     ),
@@ -176,15 +172,13 @@ class _SearchScreenState extends State<SearchScreen>
       ),
       itemCount: 20,
       itemBuilder: (context, index) {
-        return const Stack(
+        return Stack(
           children: [
             Card(
               child: AspectRatio(
                 aspectRatio: 1,
                 child: Image(
-                  image: NetworkImage(
-                    "https://liginc.co.jp/wp-content/uploads/2014/10/unagi.jpg",
-                  ),
+                  image: NetworkImage(BackendAPIClient.randomRamenImageUrl()),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -193,7 +187,12 @@ class _SearchScreenState extends State<SearchScreen>
               alignment: Alignment.bottomRight,
               child: Padding(
                 padding: EdgeInsets.all(6),
-                child: CircleAvatar(radius: 16),
+                child: CircleAvatar(
+                  radius: 16,
+                  backgroundImage: NetworkImage(
+                    BackendAPIClient.randomRamenIconUrl(),
+                  ),
+                ),
               ),
             ),
           ],
@@ -238,7 +237,7 @@ class _SearchScreenState extends State<SearchScreen>
             onTap: () {
               showBarModalBottomSheet(
                 context: context,
-                enableDrag: false,
+                enableDrag: true,
                 builder: (context) => buildRestaurantModal(context, restaurant),
               );
             },
