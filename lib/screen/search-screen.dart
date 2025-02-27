@@ -8,6 +8,7 @@ import "package:latlong2/latlong.dart";
 import "package:modal_bottom_sheet/modal_bottom_sheet.dart";
 import "package:prototype_v1/components/osm_copyright.dart";
 import "package:prototype_v1/components/user_card.dart";
+import "package:prototype_v1/model/post.dart";
 import "package:prototype_v1/model/restaurant.dart";
 import "package:prototype_v1/model/user.dart";
 import "package:prototype_v1/service/backend-api-client.dart";
@@ -28,9 +29,13 @@ class _SearchScreenState extends State<SearchScreen>
     141.354404,
   ); //札幌市をデフォルト座標として使用
   List<Restaurant> restaurants = [];
+  List<String> tags = [];
 
   // マップのアニメーション設定
-  late final _animatedMapController = AnimatedMapController(vsync: this);
+  late final _animatedMapController = AnimatedMapController(
+    vsync: this,
+    mapController: MapController(),
+  );
 
   // 現在地を更新する関数
   Future<void> _updateLocationInfo() async {
@@ -103,7 +108,7 @@ class _SearchScreenState extends State<SearchScreen>
         ),
       ),
       Padding(
-        padding: EdgeInsets.only(left: 15),
+        padding: const EdgeInsets.only(left: 15),
         child: Row(
           children: [
             Icon(
@@ -116,13 +121,13 @@ class _SearchScreenState extends State<SearchScreen>
         ),
       ),
       Padding(
-        padding: EdgeInsets.only(left: 6, top: 12),
+        padding: const EdgeInsets.only(left: 6, top: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 5, right: 5),
+                padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Container(
                   height: 35,
                   decoration: BoxDecoration(
@@ -142,13 +147,13 @@ class _SearchScreenState extends State<SearchScreen>
                     color: Theme.of(context).buttonTheme.colorScheme?.onPrimary,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(width: 5),
-                        const Text("イキタイリストに追加"),
-                        const SizedBox(width: 5),
+                        SizedBox(width: 5),
+                        Text("イキタイリストに追加"),
+                        SizedBox(width: 5),
                       ],
                     ),
                   ),
@@ -161,7 +166,9 @@ class _SearchScreenState extends State<SearchScreen>
     ];
   }
 
+  // グリッド上に表示される友達がアップロードした写真
   Widget buildFriendsPhoto() {
+    // Todo: Postクラスを使って実装する。
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -186,7 +193,7 @@ class _SearchScreenState extends State<SearchScreen>
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                padding: EdgeInsets.all(6),
+                padding: const EdgeInsets.all(6),
                 child: CircleAvatar(
                   radius: 16,
                   backgroundImage: NetworkImage(
@@ -216,7 +223,10 @@ class _SearchScreenState extends State<SearchScreen>
               const Divider(),
               const SizedBox(height: 10),
               // 友人がこのお店で撮影した写真
-              Padding(padding: EdgeInsets.all(5), child: buildFriendsPhoto()),
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: buildFriendsPhoto(),
+              ),
               const SizedBox(height: 70),
             ],
           ),
@@ -288,30 +298,68 @@ class _SearchScreenState extends State<SearchScreen>
 
   // 上の検索バー
   Widget buildSearchBar() {
-    return Padding(
-      padding: const EdgeInsets.all(9),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).scaffoldBackgroundColor.withAlpha(0x50),
-              blurRadius: 9,
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 70,
+            top: 10,
+            bottom: 10,
+            right: 10,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(
+                    context,
+                  ).scaffoldBackgroundColor.withAlpha(0x50),
+                  blurRadius: 9,
+                ),
+              ],
             ),
-          ],
-        ),
-        child: TextField(
-          decoration: InputDecoration(
-            filled: true,
-            hintText: "検索する",
-            fillColor: Theme.of(context).scaffoldBackgroundColor,
-            prefixIcon: const Icon(Icons.search),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
+            child: TextField(
+              decoration: InputDecoration(
+                filled: true,
+                hintText: "検索する",
+                fillColor: Theme.of(context).scaffoldBackgroundColor,
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
           ),
         ),
-      ),
+        Positioned(
+          left: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Material(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              color: Theme.of(context).primaryColor,
+              child: InkWell(
+                onTap: () {},
+
+                child: Container(
+                  width: 50, // ボタンの幅
+                  height: 50, // ボタンの高さ
+                  alignment: Alignment.center,
+                  child: const Icon(
+                    Icons.smart_toy_rounded,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -324,17 +372,19 @@ class _SearchScreenState extends State<SearchScreen>
             (context, index) => Padding(
               padding: const EdgeInsets.only(left: 9.0),
               child: Container(
-                width: 100,
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(6.0),
                 ),
-                child: const Center(child: Text("#data")),
+                child: Padding(
+                  padding: const EdgeInsets.all(9),
+                  child: Center(child: Text(tags[index])),
+                ),
               ),
             ),
         scrollDirection: Axis.horizontal,
 
-        itemCount: 10,
+        itemCount: tags.length,
       ),
     );
   }
@@ -346,9 +396,36 @@ class _SearchScreenState extends State<SearchScreen>
     } else {
       _updateLocationInfoThenFocusNoDelay();
     }
-
+    updateNearRestaurants();
     // TODO: implement initState
     super.initState();
+  }
+
+  void updateNearRestaurants() async {
+    await _updateLocationInfo();
+    // 更新できたら現在地にフォーカス
+    if (currentPosition != null) {
+      _animatedMapController.centerOnPoint(currentPosition!);
+
+      final fetchedRestaurants = await fetchRestaurants(
+        currentPosition!.latitude,
+        currentPosition!.longitude,
+      );
+      tags = [];
+      for (var restaurant in fetchedRestaurants) {
+        // 見つけたお店のジャンルをtagsに追加する。
+        if (restaurant.genre != null) {
+          if (!tags.contains(restaurant.genre)) {
+            setState(() {
+              tags.add(restaurant.genre!);
+            });
+          }
+        }
+
+        continue;
+      }
+      setState(() => restaurants = fetchedRestaurants);
+    }
   }
 
   @override
@@ -360,6 +437,8 @@ class _SearchScreenState extends State<SearchScreen>
             options: MapOptions(
               initialCenter: _defaultPosition, //初期位置
               initialZoom: 12.0,
+              maxZoom: 17,
+              minZoom: 6,
             ),
             mapController: _animatedMapController.mapController,
             children: [
@@ -369,6 +448,8 @@ class _SearchScreenState extends State<SearchScreen>
 
               MarkerClusterLayerWidget(
                 options: MarkerClusterLayerOptions(
+                  rotate: true,
+
                   builder: (context, marker) {
                     return Container(
                       decoration: const BoxDecoration(
@@ -400,19 +481,8 @@ class _SearchScreenState extends State<SearchScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           FloatingActionButton(
-            onPressed: () async {
-              await _updateLocationInfo();
-              // 更新できたら現在地にフォーカス
-              if (currentPosition != null) {
-                _animatedMapController.centerOnPoint(currentPosition!);
-
-                final fetchedShops = await fetchShops(
-                  currentPosition!.latitude,
-                  currentPosition!.longitude,
-                );
-
-                setState(() => restaurants = fetchedShops);
-              }
+            onPressed: () {
+              updateNearRestaurants();
             },
             child: const Icon(Icons.gps_fixed),
           ),

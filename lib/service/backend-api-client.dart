@@ -81,7 +81,7 @@ class BackendAPIClient {
 
   // ランダムなラーメンの画像を持ってくる
   static String randomRamenImageUrl() {
-    return "${Env.backendBaseUrl}/static/${Random().nextInt(11) + 1}.jpg";
+    return "${Env.backendBaseUrl}/static/random_ramens/${Random().nextInt(11) + 1}.jpeg";
   }
 
   // ランダムなラーメンの画像を持ってくる
