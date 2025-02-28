@@ -452,6 +452,10 @@ class _SearchScreenState extends State<SearchScreen>
             mapController: _animatedMapController.mapController,
             children: [
               TileLayer(
+                tileBuilder:
+                    MediaQuery.platformBrightnessOf(context) == Brightness.dark
+                        ? darkModeTileBuilder
+                        : null, //null to use the default theme
                 urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
               ),
 
