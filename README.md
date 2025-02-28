@@ -1,5 +1,5 @@
-# メシイク
-## 〜あいつの腹の内を知りたくない？〜
+おk# メシイク
+## 〜あいつの腹の内知りたくない？〜
 #### スクショ
 <p>
   <img src="https://github.com/user-attachments/assets/858cf6a9-c745-4774-bf80-5446580657ee" width="40%">
