@@ -1,7 +1,7 @@
 # メシイク
 #### 〜あいつの腹の内を知りたくない？〜
 Engineer Guild Hackathon 2025に向けて開発中のスマホ向けアプリ  
-# システム構成(2024-03-01)
+# 現在のシステム構成(2024-03-01)
 ![image](https://github.com/user-attachments/assets/266435ac-de05-4da5-b8e9-fbafd7ebb4ae)
 # プロダクト、システム構成案(2025-03-01)
 ![image](https://github.com/user-attachments/assets/44ec741f-f8f7-4c4b-9e18-b733ef182aed)
