@@ -11,6 +11,7 @@ import "package:prototype_v1/components/user_card.dart";
 import "package:prototype_v1/model/post.dart";
 import "package:prototype_v1/model/restaurant.dart";
 import "package:prototype_v1/model/user.dart";
+import "package:prototype_v1/screen/ai-chat.dart";
 import "package:prototype_v1/service/backend-api-client.dart";
 import "package:prototype_v1/service/hotpepper-api-client.dart";
 import "package:prototype_v1/state.dart";
@@ -322,7 +323,7 @@ class _SearchScreenState extends State<SearchScreen>
               decoration: InputDecoration(
                 filled: true,
                 hintText: "検索する",
-                fillColor: Theme.of(context).scaffoldBackgroundColor,
+                fillColor: Theme.of(context).colorScheme.onPrimary,
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -341,18 +342,26 @@ class _SearchScreenState extends State<SearchScreen>
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.onPrimary,
               child: InkWell(
                 onTap: () {},
 
-                child: Container(
-                  width: 50, // ボタンの幅
-                  height: 50, // ボタンの高さ
-                  alignment: Alignment.center,
-                  child: const Icon(
-                    Icons.smart_toy_rounded,
-                    size: 30,
-                    color: Colors.white,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AiChatScreen()),
+                    );
+                  },
+                  child: Container(
+                    width: 50, // ボタンの幅
+                    height: 50, // ボタンの高さ
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.smart_toy_rounded,
+                      size: 30,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
                   ),
                 ),
               ),
@@ -373,7 +382,7 @@ class _SearchScreenState extends State<SearchScreen>
               padding: const EdgeInsets.only(left: 9.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
+                  color: Theme.of(context).colorScheme.onSecondary,
                   borderRadius: BorderRadius.circular(6.0),
                 ),
                 child: Padding(
@@ -443,6 +452,10 @@ class _SearchScreenState extends State<SearchScreen>
             mapController: _animatedMapController.mapController,
             children: [
               TileLayer(
+                tileBuilder:
+                    MediaQuery.platformBrightnessOf(context) == Brightness.dark
+                        ? darkModeTileBuilder
+                        : null, //null to use the default theme
                 urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
               ),
 

@@ -88,4 +88,19 @@ class BackendAPIClient {
   static String randomRamenIconUrl() {
     return "${Env.backendBaseUrl}/static/random_icons/${Random().nextInt(5) + 1}.png";
   }
+
+  // chatのセッションを作る
+  Future<String> createChatSession() async {
+    final response = await getData("/agent/chat/create");
+    final sessionId = response.data["session_id"];
+
+    return sessionId;
+  }
+
+  Future<String> sendChat(String sessionId, String message) async {
+    final response = await getData(
+      "/agent/chat/$sessionId/chat?message=$message",
+    );
+    return response.data["message"];
+  }
 }

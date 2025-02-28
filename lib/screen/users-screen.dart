@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:prototype_v1/components/user_card.dart";
 import "package:prototype_v1/constants/backend-client.dart";
+import "package:prototype_v1/constants/user_profile_dummies.dart";
 import "package:prototype_v1/model/user.dart";
 
 // todo: アカウントリストを受け取ってそれを表示
@@ -14,7 +15,7 @@ class UsersScreen extends StatefulWidget {
 
 class _UsersScreenState extends State<UsersScreen> {
   final TextEditingController _userSearchController = TextEditingController();
-  List<User> profiles = [];
+  List<User> profiles = [...dummyUsers]; // dummyUsersを追加
 
   @override
   Widget build(BuildContext context) {

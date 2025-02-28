@@ -6,14 +6,17 @@ class OSMCopyRightWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Align(
+    return Align(
       alignment: Alignment.bottomLeft,
       child: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(7),
           child: Text(
             "©︎ OpenStreetMap contributors",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
