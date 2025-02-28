@@ -323,7 +323,7 @@ class _SearchScreenState extends State<SearchScreen>
               decoration: InputDecoration(
                 filled: true,
                 hintText: "検索する",
-                fillColor: Theme.of(context).scaffoldBackgroundColor,
+                fillColor: Theme.of(context).colorScheme.onPrimary,
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -342,7 +342,7 @@ class _SearchScreenState extends State<SearchScreen>
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.onPrimary,
               child: InkWell(
                 onTap: () {},
 
@@ -357,10 +357,10 @@ class _SearchScreenState extends State<SearchScreen>
                     width: 50, // ボタンの幅
                     height: 50, // ボタンの高さ
                     alignment: Alignment.center,
-                    child: const Icon(
+                    child: Icon(
                       Icons.smart_toy_rounded,
                       size: 30,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                   ),
                 ),
@@ -382,7 +382,7 @@ class _SearchScreenState extends State<SearchScreen>
               padding: const EdgeInsets.only(left: 9.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
+                  color: Theme.of(context).colorScheme.onSecondary,
                   borderRadius: BorderRadius.circular(6.0),
                 ),
                 child: Padding(

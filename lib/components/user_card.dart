@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
+import "package:prototype_v1/constants/backend-client.dart";
 import "package:prototype_v1/model/user.dart";
+import "package:prototype_v1/service/backend-api-client.dart";
 
 class UserCard extends StatelessWidget {
   final User profile;
@@ -26,7 +28,7 @@ class UserCard extends StatelessWidget {
                   backgroundImage:
                       profile.profileImage != null
                           ? NetworkImage(profile.profileImage!)
-                          : null,
+                          : NetworkImage(BackendAPIClient.randomRamenIconUrl()),
                 ),
                 SizedBox(width: 14),
                 Column(
