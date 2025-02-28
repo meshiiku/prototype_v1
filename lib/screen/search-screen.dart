@@ -11,6 +11,7 @@ import "package:prototype_v1/components/user_card.dart";
 import "package:prototype_v1/model/post.dart";
 import "package:prototype_v1/model/restaurant.dart";
 import "package:prototype_v1/model/user.dart";
+import "package:prototype_v1/screen/ai-chat.dart";
 import "package:prototype_v1/service/backend-api-client.dart";
 import "package:prototype_v1/service/hotpepper-api-client.dart";
 import "package:prototype_v1/state.dart";
@@ -345,14 +346,22 @@ class _SearchScreenState extends State<SearchScreen>
               child: InkWell(
                 onTap: () {},
 
-                child: Container(
-                  width: 50, // ボタンの幅
-                  height: 50, // ボタンの高さ
-                  alignment: Alignment.center,
-                  child: const Icon(
-                    Icons.smart_toy_rounded,
-                    size: 30,
-                    color: Colors.white,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AiChatScreen()),
+                    );
+                  },
+                  child: Container(
+                    width: 50, // ボタンの幅
+                    height: 50, // ボタンの高さ
+                    alignment: Alignment.center,
+                    child: const Icon(
+                      Icons.smart_toy_rounded,
+                      size: 30,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
