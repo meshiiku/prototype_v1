@@ -4,13 +4,9 @@
 <p>
   <img src="https://github.com/user-attachments/assets/858cf6a9-c745-4774-bf80-5446580657ee" width="40%">
   <img src="https://github.com/user-attachments/assets/e5fc2844-b989-4885-ba7c-cb7908deec5f" width="40%">
-</p>
-<p>
   <img src="https://github.com/user-attachments/assets/b8514013-b7ee-409e-9149-b7270ee1613d" width="40%">
-  <img src="https://github.com/user-attachments/assets/ef1ffaf2-4c13-4bc3-83d9-f2584a7b5561" width="40%">
+  <img src="https://github.com/user-attachments/assets/a2b64f33-5899-4339-9df0-48973d9bd033" width="40%">
 </p>
-
-
 
 Engineer Guild Hackathon 2025に向けて開発中のスマホ向けアプリ  
 # 現在のシステム構成(2024-03-01)
