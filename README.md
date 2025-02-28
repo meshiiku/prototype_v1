@@ -1,5 +1,6 @@
-おk# メシイク
+# メシイク！？(Engineer Guild Hackathon 2025)
 ## 〜あいつの腹の内知りたくない？〜
+⁩素直に”ご飯に行こう”と言い出せないあなたへ、気軽にメシに誘えるアプリの開発を目指しています！
 #### スクショ
 <p>
   <img src="https://github.com/user-attachments/assets/858cf6a9-c745-4774-bf80-5446580657ee" width="40%">
@@ -8,8 +9,9 @@
   <img src="https://github.com/user-attachments/assets/a2b64f33-5899-4339-9df0-48973d9bd033" width="40%">
 </p>
 
-Engineer Guild Hackathon 2025に向けて開発中のスマホ向けアプリ  
 # 現在のシステム構成(2024-03-01)
+- こちらはプロトタイプのシステム構成となっています。
+
 ![image](https://github.com/user-attachments/assets/266435ac-de05-4da5-b8e9-fbafd7ebb4ae)
 # プロダクト、システム構成案(2025-03-01)
 ![image](https://github.com/user-attachments/assets/44ec741f-f8f7-4c4b-9e18-b733ef182aed)
